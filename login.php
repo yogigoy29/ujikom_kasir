@@ -1,131 +1,166 @@
 <?php
+include 'koneksi.php';
 session_start();
-
-// Menghubungkan ke database (ganti sesuai dengan informasi database Anda)
-$koneksi = mysqli_connect("localhost", "root", "", "ujikom_kasir");
-
-// Fungsi untuk membersihkan input dari karakter khusus
-function clean_input($data) {
-    global $koneksi;
-    return mysqli_real_escape_string($koneksi, htmlspecialchars(trim($data)));
-}
-
-// Cek apakah form login telah disubmit
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = clean_input($_POST["username"]);
-    $password = clean_input($_POST["password"]);
-
-    // Query untuk mendapatkan informasi pengguna berdasarkan username
-    $query = "SELECT * FROM user WHERE username = '$username'";
-    $result = mysqli_query($koneksi, $query);
-
-    if ($result) {
-        // Cek apakah pengguna dengan username tersebut ditemukan
-        if (mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-
-            // Verifikasi password
-            if (password_verify($password, $row['password'])) {
-                // Login berhasil, set session dan arahkan ke halaman utama
-                $_SESSION['username'] = $row['username'];
-                header('location: SBAdmin/index.php');
-                exit();
-            }if (password_verify($password, $row['password'])) {
-                // Login berhasil, set session dan arahkan ke halaman utama
-                $_SESSION['username'] = $row['username'];
-                header('location: kasir/index.php');
-                exit();
-            } else {
-                $error_message = "Password salah!";
-            }
-        } else {
-            $error_message = "Username tidak ditemukan!";
-        }
-    } else {
-        $error_message = "Terjadi kesalahan dalam eksekusi query.";
-    }
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title> 
-    
-<style>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Login</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="sbadmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="sbadmin/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            background: url('background-image.jpg') center center fixed;
+            background-size: cover;
         }
 
-        form {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            padding: 20px;
+        .card {
+            border-radius: 10px;
+        }
+
+        .card-body {
+            border-radius: 10px;
+        }
+
+        .form-control {
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        p.error-message {
-            color: red;
-        }
-        h2{
-            text-align: center;
+        .btn-user {
+            border-radius: 8px;
         }
     </style>
+
 </head>
-<body>
-    <?php
-    if (isset($error_message)) {
-        echo "<p style='color: red;'>$error_message</p>";
-    }
-    ?>
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-    <h2>login Form</h2>
-        <label for="username">Username:</label>
-        <input type="text" name="username" required>
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" required>
+<body class="bg-gradient-primary d-flex align-items-center">
 
-        <button type="submit">Login</button>
-    </form>
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-lg-6">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="p-5">
+                                    <div class="text-center">
+                                        <h1 class="h4 text-gray-900 mb-4">Login di Sini </h1>
+                                    </div>
+                                    <?php 
+                                        if(isset($_POST['login'])){
+                                            $username = htmlspecialchars($_POST['username']);
+                                            $password = htmlspecialchars($_POST['password']);
+                                            
+                                            $admin = mysqli_query($koneksi, "SELECT * FROM user WHERE username = '$username'");
+                                            
+                                            if($data = mysqli_fetch_assoc($admin)){
+                                                if(password_verify($password, $data['password'])){
+                                                    $_SESSION['username'] = $data['username'];
+                                                    
+                                                    // Login Admin
+                                                    if($data['role'] == 'admin'){
+                                                        $_SESSION['user_id'] = $data['user_id'];
+                                                        $_SESSION['nama_lengkap'] = $data['nama_lengkap'];
+                                                        $_SESSION['role'] = $data['role'];
+                                                        header('location: admin/index.php');
+                                                        exit; // Penting untuk menghentikan eksekusi script setelah melakukan redirect
+                                                    }
+                                        
+                                                    // Login Petugas
+                                                    elseif($data['role'] == 'kasir'){ // Perhatikan perbedaan kapitalisasi di sini
+                                                        $_SESSION['user_id'] = $data['user_id'];
+                                                        $_SESSION['nama_lengkap'] = $data['nama_lengkap'];
+                                                        $_SESSION['role'] = $data['role'];
+                                                        header('location: kasir/index.php');
+                                                        exit; // Penting untuk menghentikan eksekusi script setelah melakukan redirect
+                                                    }
+                                        
+                                                } else {
+                                                    echo "Username dan password salah";
+                                                }
+                                            } else {
+                                                echo "Akun tidak ada";
+                                            }
+                                        }
+                                        ?>
+                                    <form method="POST" class="user">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control form-control-user" name="username" placeholder="Enter Username...">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                                </div>
+                                                <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                            </div>
+                                        </div>
+                                        <button type="submit" name="login" class="btn btn-primary btn-user btn-block">
+                                            Login
+                                        </button>
+                                    </form>
+
+                                    <div class="text-center">
+                                        <a class="small" href="dashboard/forgot-password.html">Forgot Password?</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="dashboard/register.html">Create an Account!</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="sbadmin/vendor/jquery/jquery.min.js"></script>
+    <script src="sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="sbadmin/js/sb-admin-2.min.js"></script>
+
 </body>
+
 </html>

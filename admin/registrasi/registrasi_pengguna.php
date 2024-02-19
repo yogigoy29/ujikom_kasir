@@ -1,21 +1,13 @@
 <?php 
-include '../koneksi.php';
+include '../../koneksi.php';
 
 session_start();
 
-
+$sql = "SELECT * FROM toko";
+$result = mysqli_query($koneksi,$sql);
 // if(!$_SESSION ["id"]){
 //     header('location:../login.php');
-//  }
-
-$sql="SELECT * FROM produk";
-$result=mysqli_query($koneksi,$sql);
-
-$sql1="SELECT * FROM produk_kategori";
-$result1=mysqli_query($koneksi,$sql1);
-
-$sql2="SELECT * FROM penjualan";
-$result2=mysqli_query($koneksi,$sql2);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -29,16 +21,16 @@ $result2=mysqli_query($koneksi,$sql2);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Registrasi Pengguna</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -55,14 +47,13 @@ $result2=mysqli_query($koneksi,$sql2);
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fa-solid fa-cash-register"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Kasir</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -86,7 +77,12 @@ $result2=mysqli_query($koneksi,$sql2);
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item" href="pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item" href="../toko.php">Toko</a>
+                        <a class="collapse-item" href="../Kategori.php">Kategori</a>
+                        <a class="collapse-item" href="../list_produk.php">Produk</a>
+                        <a class="collapse-item active" href="../pengguna.php">Pengguna</a>
+                        <a class="collapse-item" href="../pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item" href="../supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -104,9 +100,8 @@ $result2=mysqli_query($koneksi,$sql2);
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                         <a class="collapse-item" href="transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="transaksi/penjualan.php">Penjualan</a>
-                        <a class="collapse-item" href="transaksi/detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="log.php">Pembelian</a>
+                        <a class="collapse-item" href="penjualan.php">Penjualan</a>
                     </div>
                 </div>
             </li>
@@ -118,9 +113,9 @@ $result2=mysqli_query($koneksi,$sql2);
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Nav Item - Tables -->
+            <!-- Nav Item - regristeasi -->
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="registrasi/registrasi_pengguna.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Data User</span></a>
             </li>
@@ -190,12 +185,12 @@ $result2=mysqli_query($koneksi,$sql2);
                                 </form>
                             </div>
                         </li>
-                            
+                           
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class='mr-2 d-none d-lg-inline text-gray-600 small'><?= $_SESSION['username'] ?></span>
+                                 <span class='mr-2 d-none d-lg-inline text-gray-600 small'><?= $_SESSION['username'] ?></span>
                                 <i class="fa-solid fa-right-from-bracket"></i>
                             </a>
                             <!-- Dropdown - User Information -->
@@ -225,59 +220,59 @@ $result2=mysqli_query($koneksi,$sql2);
         </div>
         <!-- End of Content Wrapper -->
         <!-- Books Card Example -->
-<div class="row mx-auto col-lg-auto" style="width:1000px;">
-
-    <!-- Barang Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-3">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Data Barang</div>
-                            
-                        <!-- Replace the content below with relevant book information -->
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Data Barang</div>
-                        <span class="info-box-number"><b><?php echo mysqli_num_rows($result)?></b></span>
-                    </div>
-                </div>
-            </div>
+<div class="row mx-auto col-lg-auto">
+    <form action="../proses/proses_input_pengguna.php" method="post">
+      <div class="form-grup" id="perpustakaan-container">
         </div>
-    </div>
+         <?php
+            if ($result) {
+                echo "<label for='toko'>Toko :</label>";
+                echo "<select class='form-control' name='toko' required>";
 
-    <!-- Stok Barang Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2" style="width:190px;">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Kategori
-                        </div>
-                        <!-- Replace the content below with relevant borrowing information -->
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Kategori</div>
-                        <span class="info-box-number"><b><?php echo mysqli_num_rows($result1)?></b></span>
-                        <div class="number"></div>
-                    </div>
-                </div>
-            </div>
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $nama_toko = $row['nama_toko'];
+                    $toko_id = $row['toko_id'];
+                    echo "<option value='$toko_id'>$nama_toko</option>";
+                    }
+
+                    echo "</select>";
+                } else {
+                    echo "Gagal mengambil data";
+                }
+        ?>
+        <div class="form-grup">
+            <label for="nama_lengkap">Nama Lengkap:</label>
+            <input type="text" name="nama_lengkap" class="form-control" required>
         </div>
-    </div>
-
-
-    <!-- Barang Terjual Card Example -->
-    <div class="col-xl-4 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Barang Terjual
-                        </div>
-                        <!-- Replace the content below with relevant user information -->
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">Barang Terjual</div>
-                        <span class="info-box-number"><b><?php echo mysqli_num_rows($result2)?></b></span>
-                    </div>
-                    <div class="col-auto">
+        <div class="form-grup">
+            <label for="email">Email :</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-grup">
+            <label for="username">Username :</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="form-grup">
+            <label for="password">Password :</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <div class="form-grup">
+            <label for="alamat">Alamat :</label>
+            <textarea name="alamat" cols="30" rows="10" class="form-control" style="height:45px" required></textarea>
+        </div>
+        <div class="form-grup">
+            <label for="role">Role :</label>
+            <select name="role" class="form-control" required>
+                <option value="">Pilih</option>
+                <option value="kasir">Kasir</option>
+                <option value="Adminitrasi">Admin</option>
+            </select>
+        </div>
+        <div class="form-grup d-flex" style="margin-left: 40px;">
+        <a href="../pengguna.php"><button type="button" class="btn btn-secondary mt-4">Close</button></a>
+        <button type="submit" name="registrasi" class="btn btn-info mt-4 ml-2">Registrasi</button>
+        </div>
+    </form>
                         <!-- Add any additional content (e.g., an icon) here if needed -->
                     </div>
                 </div>
@@ -286,7 +281,7 @@ $result2=mysqli_query($koneksi,$sql2);
     </div>
 
 </div>
-    </div>
+    
     <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
@@ -315,21 +310,21 @@ $result2=mysqli_query($koneksi,$sql2);
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../SBAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../../SBAdmin/vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+    <script src="../../SBAdmin/js/demo/chart-area-demo.js"></script>
+    <script src="../../SBAdmin/js/demo/chart-pie-demo.js"></script>
 
 </body>
 
