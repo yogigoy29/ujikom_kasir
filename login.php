@@ -30,6 +30,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $row['username'];
                 header('location: SBAdmin/index.php');
                 exit();
+            }if (password_verify($password, $row['password'])) {
+                // Login berhasil, set session dan arahkan ke halaman utama
+                $_SESSION['username'] = $row['username'];
+                header('location: kasir/index.php');
+                exit();
             } else {
                 $error_message = "Password salah!";
             }

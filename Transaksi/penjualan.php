@@ -346,6 +346,10 @@ if (isset($_POST['submit'])) {
                     <input type="date" class="form-control" id="tanggal_penjualan" name="tanggal_penjualan">
                 </div>
                 <div class="offset-md-3 col-md-6 mb-3">
+                    <label for="tanggal_penjualan" class="form-label">Quantitas:</label>
+                    <input type="number" class="form-control" id="tanggal_penjualan" name="quantitas">
+                </div>
+                <div class="offset-md-3 col-md-6 mb-3">
                     <label for="bayar" class="form-label">total:</label>
                     <input type="text" class="form-control" id="total" name="total">
                 </div>

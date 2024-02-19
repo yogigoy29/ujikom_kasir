@@ -137,6 +137,7 @@ $result1 = mysqli_query($koneksi, $sql1);
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
                         <a class="collapse-item" href="Transaksi/penjualan.php">Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>
                 </div>
             </li>

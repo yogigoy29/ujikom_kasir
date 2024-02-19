@@ -13,23 +13,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "UPDATE user SET  username = '$username', password = '$password', email = '$email', nama_lengkap = '$nama_lengkap', alamat = '$alamat',role='$role'  WHERE user_id = '$pengguna'";
     $result = mysqli_query($koneksi, $sql);
-    //var_dump($koneksi);
-    // Lakukan proses penyimpanan ke database (misalnya)
 
     // Setelah selesai, arahkan kembali ke halaman utama atau halaman yang sesuai
     if($result){
-        //var_dump($result);
-        //header("location: ../pengguna.php");
-        //echo $pengguna;
+        header("location: ../pengguna.php");
+        exit();
     }
     else{
-        mysqli_error($koneksi);
-
+        echo mysqli_error($koneksi); // Jika terjadi kesalahan, tampilkan pesan kesalahan
     }
-    exit();
 } else {
     // Jika tidak ada data POST, arahkan kembali ke halaman edit
-    header("location: ../edit_pengguna.php?id=$id");
-    exit();
+    if(isset($_GET['id'])) {
+        $id = $_GET['id']; // Ambil nilai id dari URL
+        header("location: ../edit_pengguna.php?id=$id");
+        exit();
+    } else {
+        echo "ID tidak ditemukan"; // Tampilkan pesan jika id tidak ditemukan dalam URL
+    }
 }
 ?>

@@ -28,7 +28,7 @@ $result = mysqli_query($koneksi,$sql);
         // Lakukan koneksi ke database dan ambil data barang dengan ID tertentu
         
         ?>
-        <form action="../proses/proses_edit_supplier.php?id=<?php echo $id ?>" method="post">
+        <form action="../Proses/proses_edit_supplier.php?id=<?php echo $id ?>" method="post">
             
         <?php
         $data = mysqli_fetch_assoc($result);

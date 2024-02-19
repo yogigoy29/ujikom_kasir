@@ -7,6 +7,7 @@ $sql = "SELECT penjual_detail.*, produk.nama_produk
         INNER JOIN produk ON penjual_detail.produk_id = produk.produk_id";
 $result = mysqli_query($koneksi,$sql);
 
+
 $sql1 = "SELECT * FROM user";
 $result1 = mysqli_query($koneksi,$sql1);
 
@@ -28,19 +29,27 @@ $pesan = '';
 if (isset($_POST['submit'])) {
     // Ambil data dari form
     $toko_id = $_POST['toko_id'];
-    $user_id = $_SESSION['user']; // Menggunakan user_id dari sesi
+    $user_id = $_SESSION['username']; // Menggunakan user_id dari sesi
     $tanggal_penjualan = $_POST['tanggal_penjualan'];
     $pelanggan_id = $_POST['pelanggan_id'];
     $total = $_POST['total'];
     $bayar = $_POST['bayar'];
+    $quantitas = $_POST['quantitas'];
     $sisa = $total - $bayar;
     $keterangan = $_POST['keterangan'];
     $created_at = date('Y-m-d H:i:s');
+    $produk_id = $_POST['produk_id'];
+    $rand = rand(0,999999);
 
     // Query untuk memasukkan data penjualan ke dalam database
-    $query = "INSERT INTO penjualan (toko_id, user_id, tanggal_penjualan, pelanggan_id, total, bayar, sisa, keterangan, created_at) 
-              VALUES ('$toko_id', '$user_id', '$tanggal_penjualan', '$pelanggan_id', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
-
+    $query = "INSERT INTO penjualan (penjual_id,toko_id, user_id, tanggal_penjualan, pelanggan_id, total, bayar, sisa, keterangan, created_at) 
+              VALUES ('$rand','$toko_id', '$user_id', '$tanggal_penjualan', '$pelanggan_id', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
+    $resultproduk = mysqli_query($koneksi,"SELECT * FROM produk WHERE produk_id = $produk_id");
+    $dataproduk = mysqli_fetch_assoc($resultproduk);
+    $query2 = "INSERT INTO penjual_detail (penjual_id, produk_id, qty,  harga_beli, harga_jual) 
+              VALUES ('$rand', '$produk_id', '$quantitas',  '{$dataproduk['harga_beli']}', '{$dataproduk['harga_jual']}')";
+    $resul2 = mysqli_query($koneksi,$query2);
+    //var_dump($koneksi);
     // Eksekusi query
     if (mysqli_query($koneksi, $query)) {
         $pesan = "Data penjualan berhasil disimpan.";
