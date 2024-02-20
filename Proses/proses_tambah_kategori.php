@@ -8,7 +8,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql = "INSERT INTO produk_kategori (nama_kategori) VALUES ('$kategori')";
 
     if (mysqli_query($koneksi, $sql)) {
-        header("location:../kategori.php");
+        header("location:../admin/kategori.php");
     } else {
         echo "Error: " . "<br>" . mysqli_error($koneksi);
     }

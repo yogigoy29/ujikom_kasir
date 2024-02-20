@@ -28,7 +28,6 @@ $pesan = '';
 // Proses form jika tombol submit ditekan
 if (isset($_POST['submit'])) {
     // Ambil data dari form
-    $toko_id = $_POST['toko_id'];
     $user_id = $_SESSION['username']; // Menggunakan user_id dari sesi
     $tanggal_penjualan = $_POST['tanggal_penjualan'];
     $pelanggan_id = $_POST['pelanggan_id'];
@@ -43,7 +42,7 @@ if (isset($_POST['submit'])) {
 
     // Query untuk memasukkan data penjualan ke dalam database
     $query = "INSERT INTO penjualan (penjual_id,toko_id, user_id, tanggal_penjualan, pelanggan_id, total, bayar, sisa, keterangan, created_at) 
-              VALUES ('$rand','$toko_id', '$user_id', '$tanggal_penjualan', '$pelanggan_id', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
+              VALUES ('$rand', '$user_id', '$tanggal_penjualan', '$pelanggan_id', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
     $resultproduk = mysqli_query($koneksi,"SELECT * FROM produk WHERE produk_id = $produk_id");
     $dataproduk = mysqli_fetch_assoc($resultproduk);
     $query2 = "INSERT INTO penjual_detail (penjual_id, produk_id, qty,  harga_beli, harga_jual) 
@@ -176,9 +175,9 @@ if (isset($_POST['submit'])) {
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="../pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Divider -->
@@ -280,7 +279,7 @@ if (isset($_POST['submit'])) {
                             <thead>
                                 <tr>
                                     <th>ID Detail Penjualan</th>
-                                    <th>ID Penjualan</th>
+                                    <th>Nama Toko</th>
                                     <th>Nama Produk</th>
                                     <th>Jumlah</th>
                                     <th>Harga Beli</th>
@@ -334,7 +333,7 @@ if (isset($_POST['submit'])) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>

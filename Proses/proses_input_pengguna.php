@@ -14,7 +14,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql = "INSERT INTO user (user_id, toko_id,username, password, email, nama_lengkap, alamat, role) VALUES ('$user_id','$toko', '$username', '$hashed_password', '$email', '$namalengkap', '$alamat', '$role')";
 
     if (mysqli_query($koneksi, $sql)) {
-        header("location:../pengguna.php");
+        header("location:../admin/pengguna.php");
     } else {
         echo "Error: "  . "<br>" . mysqli_error($koneksi);
     }

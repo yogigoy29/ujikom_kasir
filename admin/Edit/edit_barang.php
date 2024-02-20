@@ -1,5 +1,5 @@
 <?php
-include '../koneksi.php';
+include '../../koneksi.php';
 
 session_start();
 
@@ -34,7 +34,7 @@ $result2 = mysqli_query($koneksi,$sql2);
         // Lakukan koneksi ke database dan ambil data barang dengan ID tertentu
         
         ?>
-        <form action="../Proses/proses_edit_barang.php?id=<?php echo $id ?>" method="post">
+        <form action="../../Proses/proses_edit_barang.php?id=<?php echo $id ?>" method="post">
              <?php
             if ($result) {
                 echo "<label for='toko'>Toko :</label>";

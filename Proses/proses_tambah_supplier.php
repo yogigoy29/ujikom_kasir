@@ -10,7 +10,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql = "INSERT INTO suplier (toko_id, nama_suplier, alamat_suplier, tlp_hp ) VALUES ('$toko', '$nama_supplier', '$alamat_supplier', '$no_hp')";
 
     if (mysqli_query($koneksi, $sql)) {
-        header("location:../supplier.php");
+        header("location:../admin/supplier.php");
     } else {
         echo "Error: " . "<br>" . mysqli_error($koneksi);
     }

@@ -1,6 +1,6 @@
 <?php
 // Include koneksi ke database
-include '../koneksi.php';
+include '../../koneksi.php';
 
 // Memulai session
 session_start();

@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // var_dump($koneksi);
     }
     else{
-        header("location: ../kategori.php");
+        header("location: ../admin/kategori.php");
         //var_dump($koneksi);
     }
     exit();

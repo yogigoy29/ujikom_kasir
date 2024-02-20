@@ -134,12 +134,7 @@ if (isset($_POST['submit'])) {
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="../toko.php">Toko</a>
-                        <a class="collapse-item " href="../kategori.php">Kategori</a>
-                        <a class="collapse-item " href="../list_produk.php">Produk</a>
-                        <a class="collapse-item " href="../pengguna.php">Pengguna</a>
                         <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="../supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -247,7 +242,7 @@ if (isset($_POST['submit'])) {
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -397,7 +392,7 @@ if (isset($_POST['submit'])) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>

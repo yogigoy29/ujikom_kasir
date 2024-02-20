@@ -218,7 +218,7 @@ $result = mysqli_query($koneksi,$sql);
 
             </div>
             <div class="row mx-auto col-lg-auto">
-    <form action="../proses/proses_tambah_pelanggan.php" method="post">
+    <form action="../../Proses/proses_tambah_pelanggan.php" method="post">
       <div class="form-grup" id="perpustakaan-container">
         </div>
               <?php
@@ -279,7 +279,7 @@ $result = mysqli_query($koneksi,$sql);
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>

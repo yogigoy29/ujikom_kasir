@@ -2,7 +2,7 @@
 
 if (isset($_GET['id']) && !empty($_GET['id'])) {
 
-    include '../koneksi.php';
+    include '../../koneksi.php';
 
     $id = $_GET['id'];
 
@@ -17,6 +17,6 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     echo "ID tidak valid.";
 }
 
-header("Location: pelanggan.php");
+header("Location: ../pelanggan.php");
 exit();
 ?>

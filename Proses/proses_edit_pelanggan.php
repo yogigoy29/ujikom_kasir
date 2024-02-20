@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        // var_dump($koneksi);
     }
     else{
-        header("location: ../pelanggan.php");
+        header("location: ../admin/pelanggan.php");
         //var_dump($koneksi);
     }
     exit();

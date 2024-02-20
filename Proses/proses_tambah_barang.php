@@ -12,7 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $sql = "INSERT INTO produk (toko_id, nama_produk, kategori_id, harga_beli, harga_jual,satuan) VALUES ('$toko', '$produk', '$kategori', '$harga_beli', '$harga_jual','$satuan')";
 
     if (mysqli_query($koneksi, $sql)) {
-        header("location: ../list_produk.php");
+        header("location: ../admin/list_produk.php");
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($koneksi);
     }

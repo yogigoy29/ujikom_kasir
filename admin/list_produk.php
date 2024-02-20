@@ -117,7 +117,6 @@ $result1 = mysqli_query($koneksi, $sql1);
                         <a class="collapse-item " href="toko.php">Toko</a>
                         <a class="collapse-item " href="kategori.php">Kategori</a>
                         <a class="collapse-item active" href="list_produk.php">Produk</a>
-                        <a class="collapse-item" href="pengguna.php">Pengguna</a>
                         <a class="collapse-item" href="pelanggan.php">Pelanggan</a>
                         <a class="collapse-item" href="supplier.php">Supplier</a>
                     </div>
@@ -128,7 +127,7 @@ $result1 = mysqli_query($koneksi, $sql1);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -147,9 +146,9 @@ $result1 = mysqli_query($koneksi, $sql1);
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Divider -->
@@ -259,7 +258,7 @@ $result1 = mysqli_query($koneksi, $sql1);
                                         <div class="container d-flex" style="position:relative; width:100%;">
                                              <table class="table" style="width:100%;height: 100%">
                                                 <?php 
-                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama Produk</th><th>Kategori</th><th>Harga Beli</th><th>Harga Jual</th><th>Satuan</th><th>Aksi</th></tr></thead>";
+                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama Produk</th><th>Kategori</th><th>Harga Beli</th><th>Harga Jual</th><th>Satuan</th></tr></thead>";
                                                 if($result){$i=0;
                                                 while ($row = $result->fetch_assoc()){  $i++;
                                                     echo "<tr>";
@@ -270,11 +269,6 @@ $result1 = mysqli_query($koneksi, $sql1);
                                                     echo "<td>" . $row["harga_beli"] . "</td>";
                                                     echo "<td>" . $row["harga_jual"] . "</td>";                                                    
                                                     echo "<td>" . $row["satuan"] . "</td>";                                                    
-                                                    echo "<td>
-                                                <a href='Edit/edit_barang.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FE7A36; color:#fff'>Edit</a>
-                                                <a href='Delete/delete_produk.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>
-                                            </td>";
-
                                         echo "</tr>";
                                     }
                                 echo "</tbody></table>";
@@ -327,7 +321,7 @@ $result1 = mysqli_query($koneksi, $sql1);
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>

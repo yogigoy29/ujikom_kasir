@@ -1,5 +1,5 @@
 <?php
-include '../koneksi.php';
+include '../../koneksi.php';
 
 session_start();
 
@@ -29,7 +29,7 @@ $result2 = mysqli_fetch_assoc($result2);
     <div class="container mt-5">
         <h2 class="text-center">Edit Pengguna</h2>
         
-        <form action="../Proses/proses_edit_pengguna.php" method="post">
+        <form action="../../Proses/proses_edit_pengguna.php" method="post">
             <input type="number" name="user_id" value="<?php echo $id; ?>">
             
             <?php if ($result) { ?>

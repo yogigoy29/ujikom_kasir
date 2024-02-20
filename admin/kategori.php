@@ -99,7 +99,7 @@ $result = mysqli_query($koneksi, $sql);
                 Menu
             </div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
+             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
                     aria-controls="collapseTwo">
@@ -113,9 +113,8 @@ $result = mysqli_query($koneksi, $sql);
                         <a class="collapse-item " href="toko.php">Toko</a>
                         <a class="collapse-item active" href="kategori.php">Kategori</a>
                         <a class="collapse-item " href="list_produk.php">Produk</a>
-                        <a class="collapse-item " href="pengguna.php">Pengguna</a>
-                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="supplier.php">Supplier</a>
+                        <a class="collapse-item" href="pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item" href="supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -124,28 +123,27 @@ $result = mysqli_query($koneksi, $sql);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                         <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
+                        <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
                         <a class="collapse-item" href="Transaksi/penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>
                 </div>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Divider -->
@@ -317,7 +315,7 @@ $result = mysqli_query($koneksi, $sql);
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>

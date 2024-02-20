@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo mysqli_error();
     }
     else{
-        header("location: ../list_produk.php");
+        header("location: ../admin/list_produk.php");
 
     }
     exit();
