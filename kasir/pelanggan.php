@@ -120,14 +120,13 @@ $result = mysqli_query($koneksi, $sql);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="transaksi/pembelian.php">Pembelian</a>
                         <a class="collapse-item" href="transaksi/penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>
@@ -135,14 +134,6 @@ $result = mysqli_query($koneksi, $sql);
             </li>
 
             <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -262,7 +253,7 @@ $result = mysqli_query($koneksi, $sql);
                                                     echo "<td>" . $row["no_hp"] . "</td>";                                                    
                                                     echo "<td>
                                                 <a href='Edit/edit_pelanggan.php?id=" . $row['pelanggan_id'] . " 'class='btn btn-sm' style='background-color:#FE7A36; color:#fff'>Edit</a>
-                                                <a href='delete_pelanggan.php?id=" . $row['pelanggan_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>
+                                                <a href='Delete/delete_pelanggan.php?id=" . $row['pelanggan_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>
                                             </td>";
 
                                         echo "</tr>";
@@ -315,6 +306,7 @@ $result = mysqli_query($koneksi, $sql);
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>

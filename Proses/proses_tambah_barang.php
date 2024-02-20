@@ -6,10 +6,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $kategori = $_POST['kategori'];
     $satuan = $_POST['satuan'];
     $produk = $_POST['nama_produk'];
-    $harga_beli = $_POST['harga_beli'];
+    $stok = $_POST['stok'];
     $harga_jual = $_POST['harga_jual'];
 
-    $sql = "INSERT INTO produk (toko_id, nama_produk, kategori_id, harga_beli, harga_jual,satuan) VALUES ('$toko', '$produk', '$kategori', '$harga_beli', '$harga_jual','$satuan')";
+    $sql = "INSERT INTO produk (toko_id, nama_produk, kategori_id, stok, harga_jual,satuan) VALUES ('$toko', '$produk', '$kategori', '$stok', '$harga_jual','$satuan')";
 
     if (mysqli_query($koneksi, $sql)) {
         header("location: ../admin/list_produk.php");

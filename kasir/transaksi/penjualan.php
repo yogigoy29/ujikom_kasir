@@ -61,7 +61,7 @@ if (isset($_POST['submit'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kategori</title>
+    <title>Penjualan</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -127,7 +127,7 @@ if (isset($_POST['submit'])) {
              <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -143,14 +143,13 @@ if (isset($_POST['submit'])) {
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
                     aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="pembelian.php">Pembelian</a>
                         <a class="collapse-item active" href="penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
                     </div>
@@ -158,13 +157,6 @@ if (isset($_POST['submit'])) {
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">

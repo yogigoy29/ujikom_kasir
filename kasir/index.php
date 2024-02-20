@@ -98,13 +98,12 @@ $result2=mysqli_query($koneksi,$sql2);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                     aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                         <a class="collapse-item" href="transaksi/pembelian.php">Pembelian</a>
                         <a class="collapse-item" href="transaksi/penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>

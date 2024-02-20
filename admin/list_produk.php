@@ -135,7 +135,7 @@ $result1 = mysqli_query($koneksi, $sql1);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/penjualan.php">Deatil Penjualan</a>
                         <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>
                 </div>
@@ -258,7 +258,7 @@ $result1 = mysqli_query($koneksi, $sql1);
                                         <div class="container d-flex" style="position:relative; width:100%;">
                                              <table class="table" style="width:100%;height: 100%">
                                                 <?php 
-                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama Produk</th><th>Kategori</th><th>Harga Beli</th><th>Harga Jual</th><th>Satuan</th></tr></thead>";
+                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama Produk</th><th>Kategori</th><th>Harga Jual</th><th>Stok</th><th>Satuan</th><th>Aksi</th></tr></thead>";
                                                 if($result){$i=0;
                                                 while ($row = $result->fetch_assoc()){  $i++;
                                                     echo "<tr>";
@@ -266,9 +266,11 @@ $result1 = mysqli_query($koneksi, $sql1);
                                                     echo "<td>" . $row["nama_toko"] . "</td>";
                                                     echo "<td>" . $row["nama_produk"] . "</td>";
                                                     echo "<td>" . $row["nama_kategori"] . "</td>";
-                                                    echo "<td>" . $row["harga_beli"] . "</td>";
-                                                    echo "<td>" . $row["harga_jual"] . "</td>";                                                    
-                                                    echo "<td>" . $row["satuan"] . "</td>";                                                    
+                                                    echo "<td>" . $row["harga_jual"] . "</td>";
+                                                    echo "<td>" . $row["stok"] . "</td>";                                                    
+                                                    echo "<td>" . $row["satuan"] . "</td>"; 
+                                                    echo "<td><a href='Delete/delete_produk.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>    
+                                                    </td>";                                               
                                         echo "</tr>";
                                     }
                                 echo "</tbody></table>";

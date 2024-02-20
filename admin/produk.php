@@ -259,8 +259,8 @@ $result1 = mysqli_query($koneksi,$sql1);
                 <input type="text" class="form-control" id="satuan" name="satuan" required>
             </div>
             <div class="form-group">
-                <label for="harga_beli">Harga Beli:</label>
-                <input type="number" class="form-control" id="harga_beli" name="harga_beli" required>
+                <label for="stok">Stok:</label>
+                <input type="number" class="form-control" id="stok" name="stok" required>
             </div>
             <div class="form-group">
                 <label for="harga_jual">Harga Jual:</label>

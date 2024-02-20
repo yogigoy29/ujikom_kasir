@@ -2,61 +2,19 @@
 include '../../koneksi.php';
 
 session_start();
-$sql = "SELECT penjual_detail.*, produk.nama_produk 
-        FROM penjual_detail
-        INNER JOIN produk ON penjual_detail.produk_id = produk.produk_id";
-$result = mysqli_query($koneksi,$sql);
+$sql = "SELECT penjualan.*, toko.nama_toko, produk.nama_produk ,pelanggan.nama_pelanggan
+        FROM penjualan 
+        INNER JOIN toko ON penjualan.toko_id = toko.toko_id
+        INNER JOIN produk ON produk.produk_id = produk.produk_id
+        INNER JOIN pelanggan ON penjualan.pelanggan_id = pelanggan.pelanggan_id
+        
+        ";
+$result = mysqli_query($koneksi, $sql);
 
-
-$sql1 = "SELECT * FROM user";
-$result1 = mysqli_query($koneksi,$sql1);
-
-$sql2 = "SELECT * FROM pelanggan";
-$result2 = mysqli_query($koneksi,$sql2);
-
-$sql_produk = "SELECT * FROM produk"; // Mengubah nama variabel sql menjadi sql_produk untuk konsistensi
-$result_produk = mysqli_query($koneksi, $sql_produk); // Menggunakan variabel koneksi yang sudah dibuat sebelumnya
-// Pastikan ada sesi yang telah dimulai
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
+if (!$result) {
+    die("Kesalahan dalam eksekusi kueri: " . mysqli_error($koneksi));
 }
 
-// Inisialisasi variabel pesan
-$pesan = '';
-
-// Proses form jika tombol submit ditekan
-if (isset($_POST['submit'])) {
-    // Ambil data dari form
-    $toko_id = $_POST['toko_id'];
-    $user_id = $_SESSION['username']; // Menggunakan user_id dari sesi
-    $tanggal_penjualan = $_POST['tanggal_penjualan'];
-    $pelanggan_id = $_POST['pelanggan_id'];
-    $total = $_POST['total'];
-    $bayar = $_POST['bayar'];
-    $quantitas = $_POST['quantitas'];
-    $sisa = $total - $bayar;
-    $keterangan = $_POST['keterangan'];
-    $created_at = date('Y-m-d H:i:s');
-    $produk_id = $_POST['produk_id'];
-    $rand = rand(0,999999);
-
-    // Query untuk memasukkan data penjualan ke dalam database
-    $query = "INSERT INTO penjualan (penjual_id,toko_id, user_id, tanggal_penjualan, pelanggan_id, total, bayar, sisa, keterangan, created_at) 
-              VALUES ('$rand','$toko_id', '$user_id', '$tanggal_penjualan', '$pelanggan_id', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
-    $resultproduk = mysqli_query($koneksi,"SELECT * FROM produk WHERE produk_id = $produk_id");
-    $dataproduk = mysqli_fetch_assoc($resultproduk);
-    $query2 = "INSERT INTO penjual_detail (penjual_id, produk_id, qty,  harga_beli, harga_jual) 
-              VALUES ('$rand', '$produk_id', '$quantitas',  '{$dataproduk['harga_beli']}', '{$dataproduk['harga_jual']}')";
-    $resul2 = mysqli_query($koneksi,$query2);
-    //var_dump($koneksi);
-    // Eksekusi query
-    if (mysqli_query($koneksi, $query)) {
-        $pesan = "Data penjualan berhasil disimpan.";
-    } else {
-        $pesan = "Gagal menyimpan data penjualan: " . mysqli_error($koneksi);
-    }
-}
 ?>
 
 
@@ -71,21 +29,20 @@ if (isset($_POST['submit'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kategori</title>
+    <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
     <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
-    
+
     <style>
         .table thead th{
             border-bottom:0px;
-            
+
         }
         th{
             border:2px solid #eeeeee;
@@ -134,52 +91,46 @@ if (isset($_POST['submit'])) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                    aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="../toko.php">Toko</a>
-                        <a class="collapse-item " href="../kategori.php">Kategori</a>
-                        <a class="collapse-item " href="../list_produk.php">Produk</a>
-                        <a class="collapse-item " href="../pengguna.php">Pengguna</a>
-                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="../supplier.php">Supplier</a>
+                        <a class="collapse-item " href="toko.php">Toko</a>
+                        <a class="collapse-item " href="kategori.php">Kategori</a>
+                        <a class="collapse-item " href="list_produk.php">Produk</a>
+                        <a class="collapse-item " href="pengguna.php">Pengguna</a>
+                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item" href="supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-                    aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="penjualan.php">Penjualan</a>
-                        <a class="collapse-item  active" href="detail_penjualan.php">Detail Penjualan</a>
+                        <h6 class="collapse-header">Transaksi</h6>
+                        <a class="collapse-item" href="penjualan.php">penjualan</a>
+                        <a class="collapse-item active" href="detail_penjualan.php">Detail penjualan</a>
+
                     </div>
                 </div>
             </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
 
+            <!-- Divider -->
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
-            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -207,19 +158,6 @@ if (isset($_POST['submit'])) {
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -246,13 +184,20 @@ if (isset($_POST['submit'])) {
                                 </form>
                             </div>
                         </li>
+                            <!-- Dropdown - Alerts -->
+                            
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
-                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                <?php if(isset($_SESSION['username'])){
+                                        echo $_SESSION['username'];
+                                        }?>
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -270,50 +215,55 @@ if (isset($_POST['submit'])) {
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <h1 class="text-center h3 mb-4 text-gray-800" style="font-weight: bold;">Tabel Penjualan Detail</h1>
+                <div class="container-fluid">
 
-                    <!-- Tabel Penjualan Detail -->
+                    <!-- Page Heading -->
+
                     <div class="table-responsive">
                         <!-- Tabel Penjualan Detail -->
                         <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>ID Detail Penjualan</th>
-                                    <th>ID Penjualan</th>
-                                    <th>Nama Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga Beli</th>
-                                    <th>Harga Jual</th>
-                                    <th>Dibuat Pada</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (mysqli_num_rows($result) > 0) {
-                                    // Output data dari setiap baris
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        echo "<tr>";
-                                        echo "<td>" . $row["penjual_detail_id"] . "</td>";
-                                        echo "<td>" . $row["penjual_id"] . "</td>";
-                                        echo "<td>" . $row["nama_produk"] . "</td>"; // Output nama produk
-                                        echo "<td>" . $row["qty"] . "</td>";
-                                        echo "<td>" . $row["harga_beli"] . "</td>";
-                                        echo "<td>" . $row["harga_jual"] . "</td>";
-                                        echo "<td>" . $row["created_at"] . "</td>";
-                                        echo "</tr>";
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID Penjualan</th>
+                                        <th>nama toko</th>
+                                        <th>nama produk</th>
+                                        <th>Tanggal Penjualan</th>
+                                        <th>nama Pelanggan</th>
+                                        <th>harga jual</th>
+                                        <th>harga beli</th>
+                                        <th>Sisa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (mysqli_num_rows($result) > 0) {
+                                        // Output data dari setiap baris
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row["penjualan_id"] . "</td>";
+                                            echo "<td>" . $row["nama_toko"] . "</td>";
+                                            echo "<td>" . $row["nama_produk"] . "</td>"; // Output nama produk
+                                            echo "<td>" . $row["tanggal_penjualan"] . "</td>";
+                                            echo "<td>" . $row["nama_pelanggan"] . "</td>";
+                                            echo "<td>" . $row["total"] . "</td>";
+                                            echo "<td>" . $row["bayar"] . "</td>";
+                                            echo "<td>" . $row["sisa"] . "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
                                     }
-                                } else {
-                                    echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-            <!-- End of Main Content -->
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- End of Content Wrapper -->
-</div>
-    <!-- End of Page Wrapper -->
+    </div>
+    <!-- End of Main Content -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -334,7 +284,7 @@ if (isset($_POST['submit'])) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../logout.php">Logout</a>
                 </div>
             </div>
         </div>
@@ -349,59 +299,6 @@ if (isset($_POST['submit'])) {
 
     <!-- Custom scripts for all pages-->
     <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="../../SBAdmin/vendor/chart.js/Chart.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="../../SBAdmin/js/demo/chart-area-demo.js"></script>
-    <script src="../../SBAdmin/js/demo/chart-pie-demo.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mendapatkan elemen select
-        var select = document.getElementById('nama_produk');
-
-        // Mendapatkan elemen input total
-        var totalInput = document.getElementById('total');
-
-        // Menambahkan event listener untuk perubahan pada elemen select
-        select.addEventListener('change', function() {
-            // Mendapatkan harga dari opsi yang dipilih
-            var harga = parseFloat(select.options[select.selectedIndex].getAttribute('data-harga'));
-            
-            // Memperbarui nilai input total dengan harga yang dipilih
-            totalInput.value = harga;
-        });
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var totalInput = document.getElementById('total');
-        var bayarInput = document.getElementById('bayar');
-        var sisaInput = document.getElementById('sisa');
-
-        totalInput.addEventListener('input', function() {
-            calculateSisa();
-        });
-
-        bayarInput.addEventListener('input', function() {
-            calculateSisa();
-        });
-
-        function calculateSisa() {
-            var total = parseFloat(totalInput.value);
-            var bayar = parseFloat(bayarInput.value);
-            
-            // Pastikan kedua nilai adalah angka dan bayar lebih besar dari total
-            if (!isNaN(total) && !isNaN(bayar) && bayar > total) {
-                var sisa = bayar - total;
-                sisaInput.value = sisa;
-            } else {
-                sisaInput.value = '';
-            }
-        }
-    });
-</script>
 
 </body>
 

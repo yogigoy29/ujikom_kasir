@@ -102,7 +102,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
-        href="../https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
@@ -146,7 +146,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="../SBAdmin/index.php">
+                <a class="nav-link" href="index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -170,12 +170,11 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="../toko.php">Toko</a>
-                        <a class="collapse-item " href="../kategori.php">Kategori</a>
-                        <a class="collapse-item " href="../list_produk.php">Produk</a>
-                        <a class="collapse-item " href="../pengguna.php">Pengguna</a>
-                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="../supplier.php">Supplier</a>
+                        <a class="collapse-item " href="toko.php">Toko</a>
+                        <a class="collapse-item " href="kategori.php">Kategori</a>
+                        <a class="collapse-item " href="list_produk.php">Produk</a>
+                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item " href="supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -194,6 +193,8 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                         <a class="collapse-item active" href="pembelian.php">Pembelian</a>
                         <a class="collapse-item" href="penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="detail_pembelian.php">Detail Pembelian</a>
+
                     </div>
                 </div>
             </li>
@@ -202,9 +203,14 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="../pengguna.php">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Data Pengguna</span></a>
+                <a class="nav-link" href="pengguna.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>data user</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../Logout.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>log out</span></a>
             </li>
 
             <!-- Divider -->
@@ -233,18 +239,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                   
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -294,100 +289,200 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
                 </nav>
                 <!-- End of Topbar -->
+                <!DOCTYPE html>
+<html lang="en">
 
-                <!-- Begin Page Content -->
-                <h2>Pembelian</h2>
-    <!-- Tampilkan pesan jika ada -->
-    <?php if ($pesan != ''): ?>
-        <p><?php echo $pesan; ?></p>
-    <?php endif; ?>
-    <form method="POST" action="">
-       <?php
-            if ($result) {
-                echo "<label for='toko'>Toko :</label>";
-                echo "<select class='form-control' name='toko' required>";
-
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $nama_toko = $row['nama_toko'];
-                    $toko_id = $row['toko_id'];
-                    echo "<option value='$toko_id'>$nama_toko</option>";
-                    }
-
-                    echo "</select>";
-                } else {
-                    echo "Gagal mengambil data";
-                }
-        ?>
-        <?php
-            if ($result1) {
-                echo "<label for='user'>Nama User :</label>";
-                echo "<select class='form-control' name='user' required>";
-
-                while ($rew = mysqli_fetch_assoc($result1)) {
-                    $nama_lengkap = $rew['nama_lengkap'];
-                    $user_id = $rew['user_id'];
-                    echo "<option value='$user_id'>$nama_lengkap</option>";
-                    }
-
-                    echo "</select>";
-                } else {
-                    echo "Gagal mengambil data";
-                }
-        $nofaktur=mysqli_query($koneksi, "select no_faktur, pembelian_id from pembelian order by pembelian_id desc");
-        $last=mysqli_num_rows($nofaktur);
-        $bacafaktur=mysqli_fetch_assoc($nofaktur);
-        if($last<=0){
-            $faktur="1-".date('Ymd');
-        }else{
-            $nomor=explode("-",$bacafaktur['no_faktur']);
-            $jml=$nomor[0]+1;
-            $faktur=$jml."-".date('Ymd');
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Pembelian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
         }
-        ?>
-        <label for="no_faktur">Nomor Faktur:</label><br>
-        <input type="text" id="no_faktur" name="no_faktur" value="<?= $faktur; ?>" required><br>
 
-        <label for="tanggal_pembelian">Tanggal Pembelian:</label><br>
-        <input type="date" id="tanggal_pembelian" name="tanggal_pembelian" required><br>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-        <div class="offset-md-3 col-md-6 mb-3">
-                <div class="form-group">
-                    <label for="barang">barang:</label>
-                    <select class="form-control" id="produk_id" name="produk_id">
-                    <option value="" disabled selected>Pilih barang...</option>
-                        <?php 
-                            if($result3){
-                                while($raw = mysqli_fetch_assoc($result3)){
-                                    $nama_produk = $raw['nama_produk'];
-                                    $id = $raw['produk_id'];
-                                    $harga = $raw['harga_jual'];
-                                    echo "<option value='$id' data-harga='$harga'>$nama_produk</option>";
-                                }
-                            } else {
-                                echo "<option value=''>Gagal mengambil data</option>";
+        h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background: url('data:image/svg+xml;utf8,<svg fill="#ccc" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 8px center;
+            background-size: 20px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .pesan {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Form Pembelian</h2>
+        <!-- Tampilkan pesan jika ada -->
+        <?php if ($pesan != ''): ?>
+            <p class="pesan"><?php echo $pesan; ?></p>
+        <?php endif; ?>
+        <form method="POST" action="">
+            <div class="form-group">
+                <label for="toko">Toko :</label>
+                <select name="toko" required>
+                    <?php
+                        if ($result) {
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                $nama_toko = $row['nama_toko'];
+                                $toko_id = $row['toko_id'];
+                                echo "<option value='$toko_id'>$nama_toko</option>";
                             }
-                        ?>
-                    </select>
-                </div>
+                        } else {
+                            echo "<option value=''>Gagal mengambil data</option>";
+                        }
+                    ?>
+                </select>
             </div>
-        <div class="offset-md-3 col-md-6 mb-3">   
-        <div class="form-group">                 
-        <label for="total">Total:</label><br>
-        <input type="text" id="total" name="total" required><br>
-        </div>
-        </div>
+            <div class="form-group">
+                <label for="user">Nama User :</label>
+                <select name="user" required>
+                    <?php
+                        if ($result1) {
+                            while ($rew = mysqli_fetch_assoc($result1)) {
+                                $nama_lengkap = $rew['nama_lengkap'];
+                                $user_id = $rew['user_id'];
+                                echo "<option value='$user_id'>$nama_lengkap</option>";
+                            }
+                        } else {
+                            echo "<option value=''>Gagal mengambil data</option>";
+                        }
+                    ?>
+                </select>
+            </div>
+            <?php
+                $nofaktur = mysqli_query($koneksi, "SELECT no_faktur, pembelian_id FROM pembelian ORDER BY pembelian_id DESC");
+                $last = mysqli_num_rows($nofaktur);
+                $bacafaktur = mysqli_fetch_assoc($nofaktur);
+                if ($last <= 0) {
+                    $faktur = "1-" . date('Ymd');
+                } else {
+                    $nomor = explode("-", $bacafaktur['no_faktur']);
+                    $jml = $nomor[0] + 1;
+                    $faktur = $jml . "-" . date('Ymd');
+                }
+            ?>
+            <div class="form-group">
+                <label for="no_faktur">Nomor Faktur:</label>
+                <input type="text" id="no_faktur" name="no_faktur" value="<?= $faktur; ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="tanggal_pembelian">Tanggal Pembelian:</label>
+                <input type="date" id="tanggal_pembelian" name="tanggal_pembelian" required>
+            </div>
+            <div class="form-group">
+                <label for="barang">Barang:</label>
+                <select id="produk_id" name="produk_id">
+                    <option value="" disabled selected>Pilih barang...</option>
+                    <?php 
+                        if ($result3) {
+                            while ($raw = mysqli_fetch_assoc($result3)) {
+                                $nama_produk = $raw['nama_produk'];
+                                $id = $raw['produk_id'];
+                                $harga = $raw['harga_jual'];
+                                echo "<option value='$id' data-harga='$harga'>$nama_produk</option>";
+                            }
+                        } else {
+                            echo "<option value=''>Gagal mengambil data</option>";
+                        }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="total">Total:</label>
+                <input type="text" id="total" name="total" required>
+            </div>
+            <div class="form-group">
+                <label for="bayar">Bayar:</label>
+                <input type="text" id="bayar" name="bayar" required>
+            </div>
+            <div class="form-group">
+                <label for="sisa">Sisa:</label>
+                <input type="text" id="sisa" name="sisa" required>
+            </div>
+            <div class="form-group">
+                <label for="keterangan">Keterangan:</label>
+                <textarea id="keterangan" name="keterangan"></textarea>
+            </div>
+            <input type="submit" name="submit" value="Submit">
+        </form>
+    </div>
+</body>
 
-        <label for="bayar">Bayar:</label><br>
-        <input type="text" id="bayar" name="bayar" required><br>
-        
-        <label for="sisa">Sisa:</label><br>
-        <input type="text" id="sisa" name="sisa" required><br>
+</html>
 
-        <label for="keterangan">Keterangan:</label><br>
-        <textarea id="keterangan" name="keterangan"></textarea><br><br>
-
-        <input type="submit" name="submit" value="Submit">
-    </form>
 </div>
 </div>
 </div>

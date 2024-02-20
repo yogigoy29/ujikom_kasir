@@ -131,8 +131,8 @@ $result = mysqli_query($koneksi, $sql);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Penjualan</a>
-                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Pembelian</a>
                     </div>
                 </div>
             </li>

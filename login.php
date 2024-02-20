@@ -122,23 +122,10 @@ session_start();
                                                 <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                            </div>
-                                        </div>
                                         <button type="submit" name="login" class="btn btn-primary btn-user btn-block">
                                             Login
                                         </button>
                                     </form>
-
-                                    <div class="text-center">
-                                        <a class="small" href="dashboard/forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="dashboard/register.html">Create an Account!</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
