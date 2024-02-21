@@ -1,31 +1,22 @@
 <?php
-include '../koneksi.php';
+include '../../koneksi.php';
 
 session_start();
-$sql="SELECT suplier.*, toko.nama_toko  FROM suplier INNER JOIN toko ON suplier.toko_id=toko.toko_id;";
+$sql = "SELECT penjualan.*, toko.nama_toko, produk.nama_produk ,pelanggan.nama_pelanggan
+        FROM penjualan 
+        INNER JOIN toko ON penjualan.toko_id = toko.toko_id
+        INNER JOIN produk ON produk.produk_id = produk.produk_id
+        INNER JOIN pelanggan ON penjualan.pelanggan_id = pelanggan.pelanggan_id
+        
+        ";
 $result = mysqli_query($koneksi, $sql);
 
-$sql1 = "SELECT COUNT(*) as total FROM suplier";
-$result1 = mysqli_query($koneksi, $sql1);
-$row = mysqli_fetch_assoc($result1);
-$total_records = $row['total'];
-
-$records_per_page = 5;
-$total_pages = ceil($total_records / $records_per_page);
-
-if (!isset($_GET['page'])) {
-    $page = 1;
-} else {
-    $page = $_GET['page'];
+if (!$result) {
+    die("Kesalahan dalam eksekusi kueri: " . mysqli_error($koneksi));
 }
 
-$start_from = ($page - 1) * $records_per_page;
-
-$sql = "SELECT suplier.*, toko.nama_toko FROM suplier
-        INNER JOIN toko ON suplier.toko_id = toko.toko_id
-        LIMIT $start_from, $records_per_page";
-$result = mysqli_query($koneksi, $sql);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -38,21 +29,20 @@ $result = mysqli_query($koneksi, $sql);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Supplier</title>
+    <title>Detail Penjualan</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
-    <link href="../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
-    
+    <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
+
     <style>
         .table thead th{
             border-bottom:0px;
-            
+
         }
         th{
             border:2px solid #eeeeee;
@@ -61,7 +51,7 @@ $result = mysqli_query($koneksi, $sql);
         }
         tr, td{
             border:2px solid #eeeeee;
-            color: #000000;
+            color: black;
         }
     </style>
 
@@ -87,7 +77,7 @@ $result = mysqli_query($koneksi, $sql);
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -107,15 +97,15 @@ $result = mysqli_query($koneksi, $sql);
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="toko.php">Toko</a>
-                        <a class="collapse-item " href="kategori.php">Kategori</a>
-                        <a class="collapse-item " href="list_produk.php">Produk</a>
-                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item active" href="supplier.php">Supplier</a>
+                        <a class="collapse-item " href="../toko.php">Toko</a>
+                        <a class="collapse-item " href="../kategori.php">Kategori</a>
+                        <a class="collapse-item " href="../list_produk.php">Produk</a>
+                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item " href="../supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -127,26 +117,26 @@ $result = mysqli_query($koneksi, $sql);
                     <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                       <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Detail Pembelian</a>
+                        <h6 class="collapse-header">Transaksi</h6>
+                        <a class="collapse-item " href="pembelian.php">Pembelian</a>
+                        <a class="collapse-item active" href="detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="detail_pembelian.php">Detail Pembelian</a>
+
                     </div>
                 </div>
             </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="pengguna.php">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Data Pengguna</span></a>
-            </li>
+            <li class="nav-item active">
+               <a class="nav-link" href="pengguna.php">
+                   <i class="fa-solid fa-users"></i>
+                   <span>Data Pengguna</span></a>
+           </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -174,19 +164,6 @@ $result = mysqli_query($koneksi, $sql);
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -213,13 +190,20 @@ $result = mysqli_query($koneksi, $sql);
                                 </form>
                             </div>
                         </li>
+                            <!-- Dropdown - Alerts -->
+                            
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
-                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                <?php if(isset($_SESSION['username'])){
+                                        echo $_SESSION['username'];
+                                        }?>
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -240,62 +224,52 @@ $result = mysqli_query($koneksi, $sql);
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Supplier</h1>
-                    <a href="registrasi/registrasi_supplier.php">
-                        <button type="button" class="btn btn-primary" style="margin-left:80%;margin-bottom:10px;">Tambah Supplier</button>
-                    </a>
 
-                    <div class="row">
-
-                        <div class="col-lg-6">
-                        <div class="table-container">
-                            <div class="container" style="width:100%; ">
-                                <div class="table-container d-flex" style="width:150%; position:absolute; left:150px;">
-                                    <div class="content shadow p-3 mb-5 bg-body-tertiary rounded" style="width:150%;height: 400px;; background-color:white;">
-                                        <div class="container d-flex" style="position:relative; width:100%;">
-                                             <table class="table" style="width:100%;height: 100%">
-                                                <?php 
-                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama</th><th>Alamat</th><th>NO_HP</th><th>Aksi</th></tr></thead>";
-                                                if($result){$i=0;
-                                                while ($row = $result->fetch_assoc()){  $i++;
-                                                    echo "<tr>";
-                                                    echo "<td>" . $i . "</td>";
-                                                    echo "<td>" . $row["nama_toko"] . "</td>";
-                                                    echo "<td>" . $row["nama_suplier"] . "</td>";
-                                                    echo "<td>" . $row["alamat_suplier"] . "</td>";
-                                                    echo "<td>" . $row["tlp_hp"] . "</td>";                                                    
-                                                    echo "<td>
-                                                <a href='Edit/edit_supplier.php?id=" . $row['suplier_id'] . " 'class='btn btn-sm' style='background-color:#FE7A36; color:#fff'>Edit</a>
-                                                <a href='Delete/delete_suplier.php?id=" . $row['suplier_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>
-                                            </td>";
-
-                                        echo "</tr>";
+                    <div class="table-responsive">
+                        <!-- Tabel Penjualan Detail -->
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID Penjualan</th>
+                                        <th>nama toko</th>
+                                        <th>nama produk</th>
+                                        <th>Tanggal Penjualan</th>
+                                        <th>nama Pelanggan</th>
+                                        <th>harga jual</th>
+                                        <th>harga beli</th>
+                                        <th>Sisa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (mysqli_num_rows($result) > 0) {
+                                        // Output data dari setiap baris
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row["penjualan_id"] . "</td>";
+                                            echo "<td>" . $row["nama_toko"] . "</td>";
+                                            echo "<td>" . $row["nama_produk"] . "</td>"; // Output nama produk
+                                            echo "<td>" . $row["tanggal_penjualan"] . "</td>";
+                                            echo "<td>" . $row["nama_pelanggan"] . "</td>";
+                                            echo "<td>" . $row["total"] . "</td>";
+                                            echo "<td>" . $row["bayar"] . "</td>";
+                                            echo "<td>" . $row["sisa"] . "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
                                     }
-                                echo "</tbody></table>";
-                            }else{
-              echo "Data tidak ditemukan";
-            }
-        ?>
-    </table>
-    </div>
-     <!-- Pagination -->
-<div class="pagination-container">
-    <ul class="pagination justify-content-center">
-        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-            <li class="page-item <?php if ($i == $page) echo 'active'; ?>"><a class="page-link" href="supplier.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-        <?php endfor; ?>
-    </ul>
-    </div>
-        </div>
-                            </div>
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
                 </div>
-            <!-- End of Main Content -->
+            </div>
         </div>
-        <!-- End of Content Wrapper -->
-
     </div>
-    <!-- End of Page Wrapper -->
+    <!-- End of Main Content -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -323,14 +297,14 @@ $result = mysqli_query($koneksi, $sql);
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../SBAdmin/vendor/jquery/jquery.min.js"></script>
-    <script src="../SBAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../SBAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../SBAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../SBAdmin/js/sb-admin-2.min.js"></script>
+    <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
 
 </body>
 

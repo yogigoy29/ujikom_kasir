@@ -55,7 +55,7 @@ $result2=mysqli_query($koneksi,$sql2);
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fa-solid fa-cash-register"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Kasir</div>
+                <div class="sidebar-brand-text mx-3">Admin</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
@@ -109,8 +109,8 @@ $result2=mysqli_query($koneksi,$sql2);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                          <a class="collapse-item" href="../admin/Transaksi/pembelian.php">Pembelian</a>
+                         <a class="collapse-item" href="../admin/Transaksi/detail_penjualan.php">Detail Penjualan</a>
                         <a class="collapse-item" href="../admin/Transaksi/penjualan.php">Detail Pembelian</a>
-                        <a class="collapse-item" href="../kasir/transaksi/detail_penjualan.php">Detail Penjualan</a>
                     </div>
                 </div>
             </li>

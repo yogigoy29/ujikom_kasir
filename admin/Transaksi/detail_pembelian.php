@@ -1,32 +1,59 @@
 <?php
-include '../koneksi.php';
+include '../../koneksi.php';
 
 session_start();
-$sql="SELECT suplier.*, toko.nama_toko  FROM suplier INNER JOIN toko ON suplier.toko_id=toko.toko_id;";
-$result = mysqli_query($koneksi, $sql);
+$sql = "SELECT pembelian_detail.*, pembelian .no_faktur, pembelian .tanggal_pembelian, pembelian .total
+FROM pembelian_detail 
+INNER JOIN pembelian ON pembelian_detail.pembelian_id = pembelian.pembelian_id";
+$result1= mysqli_query($koneksi, $sql);
 
-$sql1 = "SELECT COUNT(*) as total FROM suplier";
-$result1 = mysqli_query($koneksi, $sql1);
-$row = mysqli_fetch_assoc($result1);
-$total_records = $row['total'];
 
-$records_per_page = 5;
-$total_pages = ceil($total_records / $records_per_page);
-
-if (!isset($_GET['page'])) {
-    $page = 1;
-} else {
-    $page = $_GET['page'];
+// Pastikan ada sesi yang telah dimulai
+if (!isset($_SESSION['username'])) {
+    header("Location: login.php");
+    exit;
 }
 
-$start_from = ($page - 1) * $records_per_page;
+// Inisialisasi variabel pesan
+$pesan = '';
 
-$sql = "SELECT suplier.*, toko.nama_toko FROM suplier
-        INNER JOIN toko ON suplier.toko_id = toko.toko_id
-        LIMIT $start_from, $records_per_page";
-$result = mysqli_query($koneksi, $sql);
+// Buat koneksi ke database menggunakan PDO
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=ujikom_kasir", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "Koneksi ke database gagal: " . $e->getMessage();
+    exit;
+}
+
+// Proses form jika tombol submit ditekan
+if (isset($_POST['submit'])) {
+    // Ambil data dari form
+    $toko_id = $_POST['toko'];
+    $user_id = $_POST['user'];
+    $no_faktur = $_POST['no_faktur'];
+    $tanggal_pembelian = $_POST['tanggal_pembelian'];
+    $total = $_POST['total'];
+    $bayar = $_POST['bayar'];
+    $sisa = $total - $bayar;
+    $keterangan = $_POST['keterangan'];
+    $created_at = date('Y-m-d H:i:s');
+
+    // Query untuk memasukkan data pembelian ke dalam database
+    $query = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, total, bayar, sisa, keterangan, created_at) 
+              VALUES ('$toko_id', '$user_id', '$no_faktur', '$tanggal_pembelian', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
+
+    // Eksekusi query
+    $result = mysqli_query($koneksi, $query);
+
+    // Cek apakah pembelian berhasil atau tidak
+    if ($result) {
+        $pesan = "Pembelian berhasil!";
+    } else {
+        $pesan = "Pembelian gagal!";
+    }
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,21 +65,20 @@ $result = mysqli_query($koneksi, $sql);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Supplier</title>
+    <title>Dashboard</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
-    <link href="../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
-    
+    <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
+
     <style>
         .table thead th{
             border-bottom:0px;
-            
+
         }
         th{
             border:2px solid #eeeeee;
@@ -61,7 +87,7 @@ $result = mysqli_query($koneksi, $sql);
         }
         tr, td{
             border:2px solid #eeeeee;
-            color: #000000;
+            color: black;
         }
     </style>
 
@@ -107,15 +133,16 @@ $result = mysqli_query($koneksi, $sql);
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
-                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
                         <a class="collapse-item " href="toko.php">Toko</a>
                         <a class="collapse-item " href="kategori.php">Kategori</a>
                         <a class="collapse-item " href="list_produk.php">Produk</a>
+                        <a class="collapse-item " href="pengguna.php">Pengguna</a>
                         <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item active" href="supplier.php">Supplier</a>
+                        <a class="collapse-item" href="supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -124,16 +151,17 @@ $result = mysqli_query($koneksi, $sql);
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fa-solid fa-cash-register"></i>
+                    <i class="fas fa-fw fa-wrench"></i>
                     <span>Transaksi</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                       <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Detail Pembelian</a>
+                        <h6 class="collapse-header">Transaksi</h6>
+                        <a class="collapse-item" href="pembelian.php">Pembelian</a>
+                        <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item active" href="detail_pembelian.php">Detail Pembelian</a>
+
                     </div>
                 </div>
             </li>
@@ -144,8 +172,8 @@ $result = mysqli_query($koneksi, $sql);
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="pengguna.php">
-                    <i class="fa-solid fa-users"></i>
-                    <span>Data Pengguna</span></a>
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Data user</span></a>
             </li>
 
             <!-- Divider -->
@@ -174,19 +202,6 @@ $result = mysqli_query($koneksi, $sql);
                     </button>
 
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -213,13 +228,20 @@ $result = mysqli_query($koneksi, $sql);
                                 </form>
                             </div>
                         </li>
+                            <!-- Dropdown - Alerts -->
+                            
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
-                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                <?php if(isset($_SESSION['username'])){
+                                        echo $_SESSION['username'];
+                                        }?>
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -240,62 +262,153 @@ $result = mysqli_query($koneksi, $sql);
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Supplier</h1>
-                    <a href="registrasi/registrasi_supplier.php">
-                        <button type="button" class="btn btn-primary" style="margin-left:80%;margin-bottom:10px;">Tambah Supplier</button>
-                    </a>
 
-                    <div class="row">
 
-                        <div class="col-lg-6">
-                        <div class="table-container">
-                            <div class="container" style="width:100%; ">
-                                <div class="table-container d-flex" style="width:150%; position:absolute; left:150px;">
-                                    <div class="content shadow p-3 mb-5 bg-body-tertiary rounded" style="width:150%;height: 400px;; background-color:white;">
-                                        <div class="container d-flex" style="position:relative; width:100%;">
-                                             <table class="table" style="width:100%;height: 100%">
-                                                <?php 
-                                                    echo "<thead><tr><th>No</th><th>Toko</th><th>Nama</th><th>Alamat</th><th>NO_HP</th><th>Aksi</th></tr></thead>";
-                                                if($result){$i=0;
-                                                while ($row = $result->fetch_assoc()){  $i++;
-                                                    echo "<tr>";
-                                                    echo "<td>" . $i . "</td>";
-                                                    echo "<td>" . $row["nama_toko"] . "</td>";
-                                                    echo "<td>" . $row["nama_suplier"] . "</td>";
-                                                    echo "<td>" . $row["alamat_suplier"] . "</td>";
-                                                    echo "<td>" . $row["tlp_hp"] . "</td>";                                                    
-                                                    echo "<td>
-                                                <a href='Edit/edit_supplier.php?id=" . $row['suplier_id'] . " 'class='btn btn-sm' style='background-color:#FE7A36; color:#fff'>Edit</a>
-                                                <a href='Delete/delete_suplier.php?id=" . $row['suplier_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>
-                                            </td>";
+                    <!DOCTYPE html>
+<html lang="en">
 
-                                        echo "</tr>";
-                                    }
-                                echo "</tbody></table>";
-                            }else{
-              echo "Data tidak ditemukan";
-            }
-        ?>
-    </table>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Pembelian</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>Detail Pembelian</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Produk</th>
+                    <th>Qty</th>
+                    <th>Harga Beli</th>
+                    <th>Subtotal</th>
+                    <th>Waktu Pembelian</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Ambil data detail pembelian dari database (ganti query sesuai kebutuhan)
+                $query = "SELECT * FROM pembelian_detail WHERE pembelian_id = :pembelian_id";
+                $stmt = $pdo->prepare($query);
+                $stmt->bindParam(':pembelian_id', $pembelian_id);
+                $stmt->execute();
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                // Cek apakah ada data
+                if ($result1) {
+                    $no = 1; // Nomor urut awal
+                    foreach ($result1 as $row) {
+                        echo "<tr>";
+                        echo "<td>" . $no++ . "</td>"; // Nomor urut
+                        echo "<td>" . $row['nama_produk'] . "</td>"; // Nama produk
+                        echo "<td>" . $row['qty'] . "</td>"; // Jumlah pembelian
+                        echo "<td>" . $row['harga_beli'] . "</td>"; // Harga beli per unit
+                        echo "<td>" . $row['total'] . "</td>"; // Subtotal (harga beli * jumlah)
+                        echo "<td>" . $row['created_at'] . "</td>"; // Waktu pembelian
+                        echo "</tr>";
+                    }
+                } else {
+                    // Tampilkan pesan jika tidak ada data detail pembelian
+                    echo "<tr><td colspan='6'>Tidak ada data detail pembelian.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
-     <!-- Pagination -->
-<div class="pagination-container">
-    <ul class="pagination justify-content-center">
-        <?php for ($i = 1; $i <= $total_pages; $i++) : ?>
-            <li class="page-item <?php if ($i == $page) echo 'active'; ?>"><a class="page-link" href="supplier.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-        <?php endfor; ?>
-    </ul>
-    </div>
-        </div>
-                            </div>
-                        </div>
-                </div>
-            <!-- End of Main Content -->
-        </div>
-        <!-- End of Content Wrapper -->
+</body>
 
-    </div>
-    <!-- End of Page Wrapper -->
+</html>
+
+
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -323,14 +436,14 @@ $result = mysqli_query($koneksi, $sql);
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../SBAdmin/vendor/jquery/jquery.min.js"></script>
-    <script src="../SBAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery/jquery.min.js"></script>
+    <script src="../../SBAdmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../SBAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../SBAdmin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../SBAdmin/js/sb-admin-2.min.js"></script>
+    <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
 
 </body>
 

@@ -146,7 +146,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
+                <a class="nav-link" href="../index.php">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -170,11 +170,11 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="toko.php">Toko</a>
-                        <a class="collapse-item " href="kategori.php">Kategori</a>
-                        <a class="collapse-item " href="list_produk.php">Produk</a>
-                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="supplier.php">Supplier</a>
+                        <a class="collapse-item " href="../toko.php">Toko</a>
+                        <a class="collapse-item " href="../kategori.php">Kategori</a>
+                        <a class="collapse-item " href="../list_produk.php">Produk</a>
+                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
+                        <a class="collapse-item " href="../supplier.php">Supplier</a>
                     </div>
                 </div>
             </li>
@@ -183,7 +183,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
                     aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-cash-register"></i>
                     <span>Transaksi</span>
                 </a>
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
@@ -191,7 +191,6 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="penjualan.php">Penjualan</a>
                         <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
                         <a class="collapse-item" href="detail_pembelian.php">Detail Pembelian</a>
 
@@ -203,14 +202,9 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="pengguna.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>data user</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../Logout.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>log out</span></a>
+                <a class="nav-link" href="../pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Divider -->

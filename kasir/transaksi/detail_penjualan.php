@@ -29,7 +29,7 @@ if (!$result) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Detail Penjualan</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -101,12 +101,7 @@ if (!$result) {
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="toko.php">Toko</a>
-                        <a class="collapse-item " href="kategori.php">Kategori</a>
-                        <a class="collapse-item " href="list_produk.php">Produk</a>
-                        <a class="collapse-item " href="pengguna.php">Pengguna</a>
-                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item" href="supplier.php">Supplier</a>
+                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
                     </div>
                 </div>
             </li>
