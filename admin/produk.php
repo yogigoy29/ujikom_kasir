@@ -58,7 +58,7 @@ $result1 = mysqli_query($koneksi,$sql1);
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -82,7 +82,7 @@ $result1 = mysqli_query($koneksi,$sql1);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Data Master:</h6>
                         <a class="collapse-item" href="../toko.php">Toko</a>
-                        <a class="collapse-item" href="../kategori.php">Kategori</a>
+                        <a class="collapse-item" href="kategori.php">Kategori</a>
                         <a class="collapse-item active" href="../produk.php">Produk</a>
                         <a class="collapse-item" href="../pengguna.php">Pengguna</a>
                         <a class="collapse-item" href="../pelanggan.php">Pelanggan</a>
@@ -103,7 +103,8 @@ $result1 = mysqli_query($koneksi,$sql1);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                          <a class="collapse-item" href="../Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="../Transaksi/penjualan.php">Penjualan</a>
+                       <a class="collapse-item" href="Transaksi/laporan_penjualan.php">Laporan Penjualan</a>
+                        <a class="collapse-item" href="../Transaksi/detail_pembelian.php">Detail Pembelian</a>
                 </div>
             </li>
 

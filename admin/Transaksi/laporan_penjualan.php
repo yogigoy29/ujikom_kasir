@@ -1,21 +1,19 @@
 <?php
-include '../../koneksi.php';
-$id = $_GET["id"];
-$sql = "SELECT penjual_detail.*, produk.nama_produk, pelanggan.nama_pelanggan
-        FROM penjual_detail
-        INNER JOIN produk ON penjual_detail.produk_id = produk.produk_id
-        INNER JOIN penjualan ON penjual_detail.penjual_id = penjualan.penjualan_id
-        INNER JOIN pelanggan ON penjualan.pelanggan_id = pelanggan.pelanggan_id
-        WHERE penjual_detail.penjual_id = $id";
 
 session_start();
-if ($_SESSION["username"]){
+if ($_SESSION["username"])
     $username = $_SESSION["username"];
     $id_user = $_SESSION["user_id"];
-}
 
+include '../../koneksi.php';
+$sql = "SELECT * FROM toko";
 $result = mysqli_query($koneksi, $sql);
-
+$sql = "SELECT * FROM user";
+$result1 = mysqli_query($koneksi, $sql);
+$sql = "SELECT * FROM pelanggan";
+$result2 = mysqli_query($koneksi, $sql);
+$sql = "SELECT * FROM produk";
+$result3 = mysqli_query($koneksi, $sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,12 +33,16 @@ $result = mysqli_query($koneksi, $sql);
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
     <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
-<!-- Page Wrapper -->
+<body id="page-top">
+
+ <body id="page-top">
+
+    <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -56,7 +58,7 @@ $result = mysqli_query($koneksi, $sql);
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="../index.php">
                     <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
@@ -71,60 +73,58 @@ $result = mysqli_query($koneksi, $sql);
             </div>
         
 
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Data Master:</h6>
+                    <a class="collapse-item" href="../toko.php">Toko</a>
+                    <a class="collapse-item" href="../kategori.php">Kategori</a>
+                    <a class="collapse-item" href="../list_produk.php">Produk</a>
+                    <a class="collapse-item" href="../pelanggan.php">Pelanggan</a>
+                    <a class="collapse-item" href="../supplier.php">Supplier</a>
+                </div>
+            </div>
+        </li>
+        
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fa-solid fa-cash-register"></i>
+            <span>Transaksi</span>
+        </a>
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item active" href="../pelanggan.php">Pelanggan</a>
+                        <h6 class="collapse-header">Menu:</h6>
+                        <a class="collapse-item" href="pembelian.php">Pembelian</a>
+                        <a class="collapse-item active" href="laporan_penjualan.php">Laporan Penjualan</a>
+                        <a class="collapse-item" href="detail_pembelian.php">Detail Pembelian</a>
                     </div>
                 </div>
             </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Nav Item - Transaksi Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fa-solid fa-house"></i>
-                    <span>Transaksi</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                       <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="tabel_penjualan.php">Tabel Penjualan</a>
-                        <a class="collapse-item" href="penjualan.php">Penjualan</a>
-                    </div>
-                </div>
-            </li>
-
-            </li>
-
-            </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="registrasi_pengguna.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Data User</span></a>
-            </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
             
-           
+           <!-- Nav Item - Tables -->
+            <li class="nav-item">
+                <a class="nav-link" href="../pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
+            </li>
 
         </ul>
         
@@ -204,7 +204,6 @@ $result = mysqli_query($koneksi, $sql);
 
                     </ul>
                 </nav>
-
 <form
     class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
     <div class="input-group">
@@ -218,7 +217,15 @@ $result = mysqli_query($koneksi, $sql);
     </div>
 </form>
 
+<?php
 
+
+// Query untuk mengambil data penjualan_detail beserta informasi harga beli dari tabel produk
+$sql = "SELECT * FROM penjualan 
+    INNER JOIN toko ON toko.toko_id = penjualan.toko_id
+    INNER JOIN pelanggan ON penjualan.pelanggan_id = pelanggan.pelanggan_id";
+$result = mysqli_query($koneksi, $sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -255,16 +262,19 @@ $result = mysqli_query($koneksi, $sql);
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h2 class="text-center mb-5" style="font-weight: bold;">DETAIL</h2>
+                    <h2 class="text-center mb-5" style="font-weight: bold;">PENJUALAN</h2>
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr class="text-center" style="">                                   
-                                    <th>Nama</th>
-                                    <th>Nama Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Harga </th>
-                                    <th>Dibuat Pada</th>
+                                    <th>Toko</th>
+                                    <th>Nama Pelanggan</th>
+                                    <th>Total</th>
+                                    <th>Bayar</th>
+                                    <th>Sisa</th>
+                                    <th>Keterangan</th>
+                                    <th>Tanggal Dibuat</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -273,12 +283,18 @@ $result = mysqli_query($koneksi, $sql);
                                     // Output data dari setiap baris
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<tr>";
+                                        echo "<td>" . $row["nama_toko"] . "</td>"; // Output nama produk
                                         echo "<td>" . $row["nama_pelanggan"] . "</td>"; // Output nama produk
-                                        echo "<td>" . $row["nama_produk"] . "</td>"; // Output nama produk
-                                        echo "<td>" . $row["qty"] . "</td>";
-                                        echo "<td>" . $row["harga_jual"] . "</td>"; // Output harga beli dari tabel produk
+                                        echo "<td>" . $row["total"] . "</td>";
+                                        echo "<td>" . $row["bayar"] . "</td>"; 
+                                        echo "<td>" . $row["sisa"] . "</td>";
+                                        echo "<td>" . $row["keterangan"] . "</td>"; // Output harga beli dari tabel produk
                                         echo "<td>" . $row["created_at"] . "</td>";
+                                        echo "<td style='text-align: center;'>" . "<a href='detail_penjualan.php?id=". $row["penjualan_id"] ."' class='btn btn-primary'>Detail Penjualan</a>
+                                        <a class='btn btn-danger' href='../delete/delete_penjualan.php?id=". $row['penjualan_id'] ."'>Hapus</a>
+                                        </td>";                                      
                                         echo "</tr>";
+
                                     }
                                 } else {
                                     echo "<tr><td colspan='7'>Tidak ada data</td></tr>";

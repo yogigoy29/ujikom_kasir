@@ -88,7 +88,7 @@ $result = mysqli_query($koneksi, $sql);
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -132,8 +132,8 @@ $result = mysqli_query($koneksi, $sql);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                          <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Detail Pembelian</a>
+                        <a class="collapse-item" href="Transaksi/laporan_penjualan.php">Laporan Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/detail_pembelian.php">Detail Pembelian</a>
                     </div>
                 </div>
             </li>

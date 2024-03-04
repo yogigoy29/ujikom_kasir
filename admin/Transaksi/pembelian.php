@@ -1,91 +1,76 @@
 <?php
 include '../../koneksi.php';
-
 session_start();
-$sql = "SELECT * FROM toko";
-$result = mysqli_query($koneksi,$sql);
+// Inisialisasi data pembelian
+$pembelianToAdd = [
+    'pembelian_id' => '',
+    'toko_id' => '',
+    'user_id' => '',
+    'no_faktur' => '',
+    'tanggal_pembelian' => '',
+    'suplier_id' => '',
+    'total' => '',
+    'bayar' => '',
+    'sisa' => '',
+    'keterangan' => '',
+    'created_at' => date("Y-m-d")
+];
 
-$sql1 = "SELECT * FROM user";
-$result1 = mysqli_query($koneksi,$sql1);
-
-$sql2 = "SELECT * FROM suplier";
-$result2 = mysqli_query($koneksi,$sql2);
-
-$sql = "SELECT * FROM produk";
-$result3 = mysqli_query($koneksi,$sql);
-
-
-// Pastikan ada sesi yang telah dimulai
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Pastikan ada sesi yang telah dimulai
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Inisialisasi variabel pesan
-$pesan = '';
-
-// Proses form jika tombol submit ditekan
-if (isset($_POST['submit'])) {
-    // Ambil data dari form
-    $toko_id = $_POST['toko'];
-    $user_id = $_POST['user'];
-    $no_faktur = $_POST['no_faktur'];
-    $produk = $_POST['nama_produk'];
-    $tanggal_pembelian = $_POST['tanggal_pembelian'];
-    $total = $_POST['total'];
-    $bayar = $_POST['bayar'];
-    $sisa = $total - $bayar;
-    $keterangan = $_POST['keterangan'];
-    $created_at = date('Y-m-d H:i:s');
-
-    // Query untuk memasukkan data pembelian ke dalam database
-    $query = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, total, bayar, sisa, keterangan, created_at) 
-              VALUES ('$toko_id', '$user_id', '$no_faktur', '$tanggal_pembelian', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
-
-    // Eksekusi query
-    $result = mysqli_query($koneksi, $query);
-
-// Jika query pertama berhasil dieksekusi, lanjutkan ke query kedua
-if ($result) {
-    // Query untuk memasukkan data ke dalam Tabel Kedua
-    $query = "SELECT * FROM pembelian ORDER BY pembelian_id DESC";
-$row= mysqli_query($koneksi, $query_tabel_kedua) ;
-$row2 = mysqli_fetch_assoc($row) ;
-header("location:detail_pembelian.php?id=$row[pembelian_id]");
-
-    // Eksekusi query untuk Tabel Kedua
-    $result_tabel_kedua = mysqli_query($koneksi, $query_tabel_kedua);
-
-    // Periksa apakah query kedua berhasil dieksekusi
-    if ($result_tabel_kedua) {
-        // Data berhasil dimasukkan ke kedua tabel
-        echo "Data berhasil dimasukkan ke kedua tabel.";
-        header("location: pembelian.php");
-    } else {
-        // Jika query kedua gagal dieksekusi, hapus data dari Tabel Pertama
-        $query_hapus_tabel_pertama = "DELETE FROM tabel_pertama WHERE nama = '$nama'";
-        mysqli_query($koneksi, $query_hapus_tabel_pertama);
-
-        echo "Gagal memasukkan data ke dalam Tabel Kedua.";
+// Ambil data toko dari database
+$sql = "SELECT toko_id, nama_toko FROM toko";
+$result = $koneksi->query($sql);
+$tokoOptions = "";
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $tokoOptions .= "<option value='" . $row["toko_id"] . "'>" . $row["nama_toko"] . "</option>";
     }
-} else {
-    // Jika query pertama gagal dieksekusi
-    echo "Gagal memasukkan data ke dalam Tabel Pertama.";
-}
 }
 
-// Tutup koneksi ke database
-//mysqli_close($koneksi);
+// Ambil data user dari database
+$sql = "SELECT user_id, username FROM user";
+$result = $koneksi->query($sql);
+$userOptions = "";
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $userOptions .= "<option value='" . $row["user_id"] . "'>" . $row["username"] . "</option>";
+    }
+}
 
+// Ambil data supplier dari database
+$sql = "SELECT suplier_id, nama_suplier FROM suplier";
+$result = $koneksi->query($sql);
+$supplierOptions = "";
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $supplierOptions .= "<option value='" . $row["suplier_id"] . "'>" . $row["nama_suplier"] . "</option>";
+    }
+}
+
+// Setelah validasi data POST, simpan data pembelian ke dalam database
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Tangani data POST
+    $pembelianToAdd = [
+        'pembelian_id' => $_POST['pembelianId'],
+        'toko_id' => $_POST['tokoId'],
+        'user_id' => $_POST['userId'],
+        'no_faktur' => $_POST['noFaktur'],
+        'tanggal_pembelian' => $_POST['tanggalPembelian'],
+        'suplier_id' => $_POST['suplierId'],
+        'total' => $_POST['total'],
+        'bayar' => $_POST['bayar'],
+        'sisa' => $_POST['sisa'],
+        'keterangan' => $_POST['keterangan'],
+        'created_at' => $_POST['createdAt'],
+    ];
+
+    // Simpan data ke dalam database
+    // Code untuk menyimpan data ke database di sini
+    // Pastikan untuk mengganti bagian ini dengan logika penyimpanan ke database sesuai dengan struktur tabel Anda
+}
+
+// Tutup koneksi
+$koneksi->close();
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -97,39 +82,164 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Pembelian</title>
+    <title>Pembelian Barang</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 120vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
 
+        #formContainer {
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .wrapper{
+        width:100%;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        select,
+        input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 49%;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #simpanBtn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        #batalBtn {
+            float: right;
+            background-color: #ccc;
+            color: black;
+            border: none;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* CSS untuk penampilan tabel produk */
+        #productTableContainer {
+            float: right;
+            width: 50%;
+            padding-left: 20px;
+        }
+
+        #productTable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #productTable td,
+        #productTable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #productTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #f2f2f2;
+        }
+
+        /* Tambahkan gaya untuk checkbox */
+        .checkbox-label {
+            display: block;
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .checkbox-label input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .checkbox-label:hover input~.checkmark {
+            background-color: #ccc;
+        }
+
+        .checkbox-label input:checked~.checkmark {
+            background-color: #2196F3;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-label input:checked~.checkmark:after {
+            display: block;
+        }
+
+        .checkbox-label .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    </style>
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
     <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
-    
-    <style>
-        .table thead th{
-            border-bottom:0px;
-            
-        }
-        th{
-            border:2px solid #eeeeee;
-            background-color: white;
-            color: black;
-        }
-        tr, td{
-            border:2px solid #eeeeee;
-            color: black;
-        }
-    </style>
 
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
-    <div id="wrapper">
+       <!-- Page Wrapper -->
+    <div class="wrapper" id="wrapper">
 
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -147,7 +257,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="../index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -160,43 +270,43 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-             <li class="nav-item">
+                        <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="../toko.php">Toko</a>
-                        <a class="collapse-item " href="../kategori.php">Kategori</a>
-                        <a class="collapse-item " href="../list_produk.php">Produk</a>
-                        <a class="collapse-item " href="../pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item " href="../supplier.php">Supplier</a>
-                    </div>
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Data Master:</h6>
+                    <a class="collapse-item" href="../toko.php">Toko</a>
+                    <a class="collapse-item" href="../kategori.php">Kategori</a>
+                    <a class="collapse-item" href="../list_produk.php">Produk</a>
+                    <a class="collapse-item" href="../pelanggan.php">Pelanggan</a>
+                    <a class="collapse-item" href="../supplier.php">Supplier</a>
                 </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-                    aria-controls="collapseTwo">
-                    <i class="fa-solid fa-cash-register"></i>
-                    <span>Transaksi</span>
-                </a>
+            </div>
+        </li>
+        
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fa-solid fa-cash-register"></i>
+                <span>Transaksi</span>
+            </a>
                 <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item active" href="pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="laporan_penjualan.php">Laporan Penjualan</a>
                         <a class="collapse-item" href="detail_pembelian.php">Detail Pembelian</a>
-
                     </div>
                 </div>
             </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -233,7 +343,18 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                     </button>
 
                     <!-- Topbar Search -->
-                   
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -272,7 +393,7 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../../logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -283,240 +404,218 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
 
                 </nav>
                 <!-- End of Topbar -->
-                <!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form Pembelian</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
 
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+                    <div style='display:flex;flex-direction:row;'>
 
-        h2 {
-            margin-top: 0;
-            color: #333;
-        }
+        <div id="formContainer">
+            <h2>Tambah Pembelian</h2>
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
-        }
+            <form id="formTambahPembelian" method="post" action="detail_pembelian.php">
 
-        input[type="text"],
-        input[type="date"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+                <input type="hidden" id="pembelianId" name="pembelianId" value="">
 
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background: url('data:image/svg+xml;utf8,<svg fill="#ccc" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 8px center;
-            background-size: 20px;
-        }
-
-        textarea {
-            resize: vertical;
-        }
-
-        input[type="submit"] {
-            background-color: #4caf50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        .pesan {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h2>Form Pembelian</h2>
-        <!-- Tampilkan pesan jika ada -->
-        <?php if ($pesan != ''): ?>
-            <p class="pesan"><?php echo $pesan; ?></p>
-        <?php endif; ?>
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="toko">Toko :</label>
-                <select name="toko" required>
-                    <?php
-                        if ($result) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                $nama_toko = $row['nama_toko'];
-                                $toko_id = $row['toko_id'];
-                                echo "<option value='$toko_id'>$nama_toko</option>";
-                            }
-                        } else {
-                            echo "<option value=''>Gagal mengambil data</option>";
-                        }
-                    ?>
+                <label for="tokoId">Nama Toko:</label>
+                <select id="tokoId" name="tokoId" required>
+                    <option value="">Pilih Toko</option>
+                    <?= $tokoOptions ?>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="user">Nama User :</label>
-                <select name="user" required>
-                    <?php
-                        if ($result1) {
-                            while ($rew = mysqli_fetch_assoc($result1)) {
-                                $nama_lengkap = $rew['nama_lengkap'];
-                                $user_id = $rew['user_id'];
-                                echo "<option value='$user_id'>$nama_lengkap</option>";
-                            }
-                        } else {
-                            echo "<option value=''>Gagal mengambil data</option>";
-                        }
-                    ?>
+
+                <label for="userId">Nama User:</label>
+                <select id="userId" name="userId" required>
+                    <option value='<?= $_SESSION['user_id']?>'><?= $_SESSION['username']?></option>
                 </select>
-            </div>
-            <?php
-                $nofaktur = mysqli_query($koneksi, "SELECT no_faktur, pembelian_id FROM pembelian ORDER BY pembelian_id DESC");
-                $last = mysqli_num_rows($nofaktur);
-                $bacafaktur = mysqli_fetch_assoc($nofaktur);
-                if ($last <= 0) {
-                    $faktur = "1-" . date('Ymd');
-                } else {
-                    $nomor = explode("-", $bacafaktur['no_faktur']);
-                    $jml = $nomor[0] + 1;
-                    $faktur = $jml . "-" . date('Ymd');
-                }
-            ?>
-            <div class="form-group">
-                <label for="no_faktur">Nomor Faktur:</label>
-                <input type="text" id="no_faktur" name="no_faktur" value="<?= $faktur; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="tanggal_pembelian">Tanggal Pembelian:</label>
-                <input type="date" id="tanggal_pembelian" name="tanggal_pembelian" required>
-            </div>
-            <div class="form-group">
-                <label for="barang">Barang:</label>
-                <select id="produk_id" name="produk_id">
-                    <option value="" disabled selected>Pilih barang...</option>
-                    <?php 
-                        if ($result3) {
-                            while ($raw = mysqli_fetch_assoc($result3)) {
-                                $nama_produk = $raw['nama_produk'];
-                                $id = $raw['produk_id'];
-                                $harga = $raw['harga_jual'];
-                                echo "<option value='$id' data-harga='$harga'>$nama_produk</option>";
-                            }
-                        } else {
-                            echo "<option value=''>Gagal mengambil data</option>";
-                        }
-                    ?>
+
+                <label for="noFaktur">No Faktur:</label>
+                <input type="text" id="noFaktur" name="noFaktur" value="<?= $pembelianToAdd['no_faktur'] ?>" required>
+
+                <label for="tanggalPembelian">Tanggal Pembelian:</label>
+                <input type="date" id="tanggalPembelian" name="tanggalPembelian" value="<?= $pembelianToAdd['tanggal_pembelian'] ?>" required>
+
+                <label for="suplierId">Nama Supplier:</label>
+                <select id="suplierId" name="suplierId" required onchange="showProducts()">
+                    <option value="">Pilih Supplier</option>
+                    <?= $supplierOptions ?>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="total">Total:</label>
-                <input type="text" id="total" name="total" required>
-            </div>
-            <div class="form-group">
-                <label for="bayar">Bayar:</label>
-                <input type="text" id="bayar" name="bayar" required>
-            </div>
-            <div class="form-group">
-                <label for="sisa">Sisa:</label>
-                <input type="text" id="sisa" name="sisa" required>
-            </div>
-            <div class="form-group">
+
+                <input type="hidden" id="total" name="total" value="<?= $pembelianToAdd['total'] ?>">
+                <input type="hidden" id="sisa" name="sisa" value="<?= $pembelianToAdd['sisa'] ?>">
+
+                <!-- Tambahkan div untuk menampilkan total, bayar, dan sisa -->
+                <div id="totalBayar">
+                    <div>Total: <span id="totalAmount" oninput="updateTotal()">0</span></div>
+                    <div>
+                        <label for="bayar">Bayar:</label>
+                        <input type="number" id="bayar" name="bayar" oninput="hitungSisa()">
+                    </div>
+                    <div>Sisa: <span id="sisaBayar" oninput="hitungSisa()">0</span></div>
+                </div>
+
                 <label for="keterangan">Keterangan:</label>
-                <textarea id="keterangan" name="keterangan"></textarea>
-            </div>
-            <input type="submit" name="submit" value="Submit">
-        </form>
-    </div>
-</body>
+                <input type="text" id="keterangan" name="keterangan" value="<?= $pembelianToAdd['keterangan'] ?>" required>
 
-</html>
+                <input type="hidden" id="createdAt" name="createdAt" value="<?= date("Y-m-d") ?>">
 
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-            <!-- End of Main Content -->
-
-           
-
+                <button id="simpanBtn" type="submit">Simpan</button>
+                <button id="batalBtn" type="button" onclick="history.back()">Batal</button>
+            </form>
         </div>
-        <!-- End of Content Wrapper -->
-
-    </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="logout.php">Logout</a>
-                </div>
-            </div>
+        <!-- Container untuk menampilkan tabel produk -->
+        <div id="productTableContainer">
+            <h3>Daftar Produk</h3>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Qty</th>
+                        <th>Pilih</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ekonomi</td>
+                        <td>Rp. 20.000</td>
+                        <td><input type="number" id="qtyEkonomi" name="qtyEkonomi" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkEkonomi" name="selectProduct[]" value="Ekonomi" onchange="updateQty(this)"></td>
+                    </tr>
+                    <tr>
+                        <td>Kopi</td>
+                        <td>Rp. 25.000</td>
+                        <td><input type="number" id="qtyKopi" name="qtyKopi" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkKopi" name="selectProduct[]" value="Kopi" onchange="updateQty(this)"></td>
+                    </tr>
+                    <tr>
+                        <td>Nabati</td>
+                        <td>Rp. 20.000</td>
+                        <td><input type="number" id="qtyNabati" name="qtyNabati" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkNabati" name="selectProduct[]" value="Nabati" onchange="updateQty(this)"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            
         </div>
     </div>
+
+    <script>
+        // Fungsi untuk menghitung total pembelian dan memperbarui input tersembunyi
+        function updateTotal() {
+            let total = 0;
+            const checkboxes = document.querySelectorAll('.selectProduct:checked');
+            checkboxes.forEach(function (checkbox) {
+                const productName = checkbox.value;
+                const qty = parseFloat(document.getElementById('qty' + productName).value) || 0;
+                const harga = getProductPrice(productName); // Panggil fungsi getProductPrice() untuk mendapatkan harga produk
+                total += harga * qty;
+            });
+            document.getElementById('total').value = total; // Perbarui nilai input tersembunyi total
+            document.getElementById('totalAmount').textContent = formatCurrency(total); // Format angka sebagai mata uang
+            return total;
+        }
+
+        // Fungsi untuk memformat angka sebagai mata uang (Rp. 20,000.00)
+        function formatCurrency(amount) {
+            return 'Rp. ' + amount.toLocaleString('id-ID', { minimumFractionDigits: 2 });
+        }
+
+        // Fungsi untuk mendapatkan harga produk berdasarkan namanya
+        function getProductPrice(productName) {
+            // Harga barang (di sini diimplementasikan secara statis, Anda dapat memodifikasi agar sesuai dengan kebutuhan Anda)
+            const hargaBarang = {
+                "Ekonomi": 20000,
+                "Kopi": 25000,
+                "Nabati": 20000
+            };
+
+            return hargaBarang[productName] || 0; // Kembalikan harga produk, jika tidak ada, kembalikan 0
+        }
+
+        // Fungsi untuk menghitung sisa pembayaran dan memperbarui input tersembunyi
+        function hitungSisa() {
+            const total = updateTotal();
+            let bayarValue = document.getElementById('bayar').value;
+            // Hapus titik sebagai pemisah ribuan
+            bayarValue = bayarValue.replace(/\./g, '');
+            const bayar = parseFloat(bayarValue) || 0;
+            const sisa = bayar - total;
+            document.getElementById('sisa').value = sisa; // Perbarui nilai input tersembunyi sisa
+            document.getElementById('sisaBayar').textContent = isNaN(sisa) ? 'Rp. 0,00' : (sisa >= 0 ? 'Rp. ' + sisa.toLocaleString('id-ID', { minimumFractionDigits: 2 }) : 'Rp. 0,00');
+        }
+
+        // Fungsi untuk memperbarui checkbox dan menghitung total saat jumlah barang diubah
+        function updateCheckbox(element, productName) {
+            const qtyInput = document.getElementById('qty' + productName);
+            const qty = parseFloat(qtyInput.value) || 0;
+            const checkbox = document.getElementById('chk' + productName);
+            checkbox.checked = qty > 0;
+            hitungSisa();
+        }
+
+        // Fungsi untuk memperbarui jumlah barang dan menghitung total saat checkbox diubah
+        function updateQty(element) {
+            const productName = element.value;
+            const qtyInput = document.getElementById('qty' + productName);
+            qtyInput.value = element.checked ? 1 : 0;
+            updateCheckbox(element, productName); // Perbarui checkbox saat jumlah barang diubah
+            hitungSisa();
+        }
+
+
+        // Tambahkan event listener untuk checkbox dan input jumlah barang
+        const checkboxes = document.querySelectorAll('.selectProduct');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                updateQty(this);
+            });
+        });
+
+        const qtyInputs = document.querySelectorAll('input[type="number"]');
+        qtyInputs.forEach(function (input) {
+            input.addEventListener('input', function () {
+                updateCheckbox(this, input.id.replace('qty', ''));
+            });
+        });
+
+        // Panggil hitungSisa() untuk menginisialisasi total saat halaman dimuat
+        window.onload = function () {
+            hitungSisa();
+            updateTotal();
+        };
+
+        // Fungsi untuk menampilkan pesan dan mengonfirmasi pembelian selesai
+        function selesaiPembelian() {
+            // Hitung total
+            const total = updateTotal();
+            
+            // Dapatkan nilai bayar dari input
+            const bayarInput = document.getElementById('bayar');
+            const bayar = parseFloat(bayarInput.value) || 0; // tambahkan || 0 untuk menangani input yang kosong
+
+            // Hitung sisa pembayaran
+            const sisa = bayar - total;
+
+            // Perbarui tampilan sisa
+            document.getElementById('sisaBayar').textContent = isNaN(sisa) ? 0 : (sisa >= 0 ? sisa.toFixed(2) : 0);
+
+            // Tampilkan notifikasi sesuai dengan sisa pembayaran
+            if (!isNaN(total)) {
+                if (sisa >= 0) {
+                    // Jika pembayaran mencukupi
+                    alert('Pembelian berhasil. Total yang harus dibayar: Rp. ' + total.toFixed(2) + '. Sisa: Rp. ' + sisa.toFixed(2));
+                } else {
+                    // Jika pembayaran tidak mencukupi
+                    alert('Pembayaran tidak mencukupi. Total yang harus dibayar: Rp. ' + total.toFixed(2) + '. Silakan periksa kembali pembayaran Anda.');
+                }
+            } else {
+                // Jika jumlah barang yang dibeli tidak valid
+                alert('Mohon masukkan jumlah barang yang dibeli.');
+            }
+        }
+
+    </script>
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../SBAdmin/vendor/jquery/jquery.min.js"></script>
@@ -528,53 +627,15 @@ header("location:detail_pembelian.php?id=$row[pembelian_id]");
     <!-- Custom scripts for all pages-->
     <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Mendapatkan elemen select
-        var select = document.getElementById('produk_id');
+    <!-- Page level plugins -->
+    <script src="../../SBAdmin/vendor/chart.js/Chart.min.js"></script>
 
-        // Mendapatkan elemen input total
-        var totalInput = document.getElementById('total');
+    <!-- Page level custom scripts -->
+    <script src="../../SBAdmin/js/demo/chart-area-demo.js"></script>
+    <script src="../../SBAdmin/js/demo/chart-pie-demo.js"></script>
 
-        // Menambahkan event listener untuk perubahan pada elemen select
-        select.addEventListener('change', function() {
-            // Mendapatkan harga dari opsi yang dipilih
-            var harga = parseFloat(select.options[select.selectedIndex].getAttribute('data-harga'));
-            
-            // Memperbarui nilai input total dengan harga yang dipilih
-            totalInput.value = harga;
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var totalInput = document.getElementById('total');
-        var bayarInput = document.getElementById('bayar');
-        var sisaInput = document.getElementById('sisa');
-
-        totalInput.addEventListener('input', function() {
-            calculateSisa();
-        });
-
-        bayarInput.addEventListener('input', function() {
-            calculateSisa();
-        });
-
-        function calculateSisa() {
-            var total = parseFloat(totalInput.value);
-            var bayar = parseFloat(bayarInput.value);
-            
-            // Pastikan kedua nilai adalah angka dan bayar lebih besar dari total
-            if (!isNaN(total) && !isNaN(bayar) && bayar > total) {
-                var sisa = bayar - total;
-                sisaInput.value = sisa;
-            } else {
-                sisaInput.value = '';
-            }
-        }
-    });
-</script>
+    <!-- Additional custom scripts or scripts for handling data tables can be added here -->
 
 </body>
+
 </html>

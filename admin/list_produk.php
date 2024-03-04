@@ -21,9 +21,11 @@ if (!isset($_GET['page'])) {
 
 $start_from = ($page - 1) * $records_per_page;
 
-$sql1 = "SELECT produk.*, produk_kategori.nama_toko FROM produk
-        INNER JOIN produk_kategori ON produk.kategori_id = produk_kategori.id
-        INNER JOIN toko ON produk.toko_id=toko.toko_id
+$sql1="SELECT produk.*, produk_kategori.nama_kategori, toko.nama_toko, suplier.nama_suplier
+      FROM produk  
+      INNER JOIN produk_kategori ON produk.kategori_id=produk_kategori.kategori_id
+      INNER JOIN suplier ON produk.suplier_id = suplier.suplier_id   
+      INNER JOIN toko ON produk.toko_id=toko.toko_id
         LIMIT $start_from, $records_per_page";
 $result1 = mysqli_query($koneksi, $sql1);
 ?>
@@ -91,7 +93,7 @@ $result1 = mysqli_query($koneksi, $sql1);
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -135,8 +137,8 @@ $result1 = mysqli_query($koneksi, $sql1);
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="Transaksi/pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="Transaksi/detail_penjualan.php">Detail Penjualan</a>
-                        <a class="collapse-item" href="Transaksi/penjualan.php">Detail Pembelian</a>
+                        <a class="collapse-item" href="Transaksi/laporan_penjualan.php">Laporan Penjualan</a>
+                        <a class="collapse-item" href="Transaksi/detail_pembelian.php">Detail Pembelian</a>
                     </div>
                 </div>
             </li>
@@ -269,7 +271,9 @@ $result1 = mysqli_query($koneksi, $sql1);
                                                     echo "<td>" . $row["harga_jual"] . "</td>";
                                                     echo "<td>" . $row["stok"] . "</td>";                                                    
                                                     echo "<td>" . $row["satuan"] . "</td>"; 
-                                                    echo "<td><a href='Delete/delete_produk.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>    
+                                                    echo "<td>
+                                                    <a href='Edit/edit_barang.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FE7A36; color:#fff'>Edit</a>
+                                                    <a href='Delete/delete_produk.php?id=" . $row['produk_id'] . " 'class='btn btn-sm' style='background-color:#FF4646; color:#fff'>Hapus</a>    
                                                     </td>";                                               
                                         echo "</tr>";
                                     }

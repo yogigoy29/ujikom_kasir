@@ -1,58 +1,7 @@
-<?php
+<?php 
 include '../../koneksi.php';
 
 session_start();
-$sql = "SELECT pembelian_detail.*, pembelian .no_faktur, pembelian .tanggal_pembelian, pembelian .total
-FROM pembelian_detail 
-INNER JOIN pembelian ON pembelian_detail.pembelian_id = pembelian.pembelian_id";
-$result1= mysqli_query($koneksi, $sql);
-
-
-// Pastikan ada sesi yang telah dimulai
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit;
-}
-
-// Inisialisasi variabel pesan
-$pesan = '';
-
-// Buat koneksi ke database menggunakan PDO
-try {
-    $pdo = new PDO("mysql:host=localhost;dbname=ujikom_kasir", "root", "");
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Koneksi ke database gagal: " . $e->getMessage();
-    exit;
-}
-
-// Proses form jika tombol submit ditekan
-if (isset($_POST['submit'])) {
-    // Ambil data dari form
-    $toko_id = $_POST['toko'];
-    $user_id = $_POST['user'];
-    $no_faktur = $_POST['no_faktur'];
-    $tanggal_pembelian = $_POST['tanggal_pembelian'];
-    $total = $_POST['total'];
-    $bayar = $_POST['bayar'];
-    $sisa = $total - $bayar;
-    $keterangan = $_POST['keterangan'];
-    $created_at = date('Y-m-d H:i:s');
-
-    // Query untuk memasukkan data pembelian ke dalam database
-    $query = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, total, bayar, sisa, keterangan, created_at) 
-              VALUES ('$toko_id', '$user_id', '$no_faktur', '$tanggal_pembelian', '$total', '$bayar', '$sisa', '$keterangan', '$created_at')";
-
-    // Eksekusi query
-    $result = mysqli_query($koneksi, $query);
-
-    // Cek apakah pembelian berhasil atau tidak
-    if ($result) {
-        $pesan = "Pembelian berhasil!";
-    } else {
-        $pesan = "Pembelian gagal!";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,37 +14,20 @@ if (isset($_POST['submit'])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard</title>
+    <title>Pembelian Barang</title>
 
     <!-- Custom fonts for this template-->
     <link href="../../SBAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Custom styles for this template-->
     <link href="../../SBAdmin/css/sb-admin-2.min.css" rel="stylesheet">
-
-    <style>
-        .table thead th{
-            border-bottom:0px;
-
-        }
-        th{
-            border:2px solid #eeeeee;
-            background-color: white;
-            color: black;
-        }
-        tr, td{
-            border:2px solid #eeeeee;
-            color: black;
-        }
-    </style>
 
 </head>
 
 <body id="page-top">
 
-    <!-- Page Wrapper -->
+       <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -113,8 +45,8 @@ if (isset($_POST['submit'])) {
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                <a class="nav-link" href="../index.php">
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -127,41 +59,39 @@ if (isset($_POST['submit'])) {
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
-                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
-                    aria-controls="collapseTwo">
+                  <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Data Master</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Data Master:</h6>
-                        <a class="collapse-item " href="toko.php">Toko</a>
-                        <a class="collapse-item " href="kategori.php">Kategori</a>
-                        <a class="collapse-item " href="list_produk.php">Produk</a>
-                        <a class="collapse-item " href="pengguna.php">Pengguna</a>
-                        <a class="collapse-item " href="pelanggan.php">Pelanggan</a>
-                        <a class="collapse-item" href="supplier.php">Supplier</a>
-                    </div>
+                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Data Master:</h6>
+                    <a class="collapse-item" href="../toko.php">Toko</a>
+                    <a class="collapse-item" href="../kategori.php">Kategori</a>
+                    <a class="collapse-item" href="../list_produk.php">Produk</a>
+                    <a class="collapse-item" href="../pelanggan.php">Pelanggan</a>
+                    <a class="collapse-item" href="../supplier.php">Supplier</a>
                 </div>
-            </li>
-
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Transaksi</span>
-                </a>
-                <div id="collapseUtilities" class="collapse show" aria-labelledby="headingUtilities"
+            </div>
+        </li>
+        
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+            aria-controls="collapseTwo">
+            <i class="fa-solid fa-cash-register"></i>
+            <span>Transaksi</span>
+        </a>
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Transaksi</h6>
+                        <h6 class="collapse-header">Menu:</h6>
                         <a class="collapse-item" href="pembelian.php">Pembelian</a>
-                        <a class="collapse-item" href="detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="laporan_penjualan.php">Laporan Penjualan</a>
                         <a class="collapse-item active" href="detail_pembelian.php">Detail Pembelian</a>
-
                     </div>
                 </div>
             </li>
@@ -171,9 +101,9 @@ if (isset($_POST['submit'])) {
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="pengguna.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Data user</span></a>
+                <a class="nav-link" href="../pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Divider -->
@@ -202,6 +132,19 @@ if (isset($_POST['submit'])) {
                     </button>
 
                     <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -228,25 +171,18 @@ if (isset($_POST['submit'])) {
                                 </form>
                             </div>
                         </li>
-                            <!-- Dropdown - Alerts -->
-                            
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                <?php if(isset($_SESSION['username'])){
-                                        echo $_SESSION['username'];
-                                        }?>
-                                </span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['username'] ?></span>
+                                <i class="fa-solid fa-right-from-bracket"></i>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="logout.php" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="../../logout.php" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -262,153 +198,126 @@ if (isset($_POST['submit'])) {
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-
-
                     <!DOCTYPE html>
-<html lang="en">
+                    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Halaman Pembelian</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Data Pembelian Barang</title>
+                        <style>
+                            table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 20px;
+                            }
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+                            th,
+                            td {
+                                border: 1px solid #ddd;
+                                padding: 8px;
+                                text-align: left;
+                                color: #000;
+                            }
 
-        h2 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
+                            th {
+                                background-color: #f2f2f2;
+                            }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+                            button {
+                                padding: 5px 10px;
+                                margin-right: 5px;
+                            }
+                        </style>
+                    </head>
 
-        label {
-            display: block;
-            font-weight: bold;
-        }
+                    <body>
 
-        input[type="text"],
-        input[type="date"],
-        select,
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+                        <h2>Data Pembelian Barang</h2>
 
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
+                        <a href="pembelian.php"><button onclick="tambahPembelian()" class='btn btn-primary'>Tambah Pembelian</button></a>
 
-        button[type="submit"] {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+                        <table id="tabelPembelian">
+                            <tr>
+                                <th>Pembelian ID</th>
+                                <th>Nama Toko</th>
+                                <th>Nama User</th>
+                                <th>No Faktur</th>
+                                <th>Tanggal Pembelian</th>
+                                <th>Nama Supplier</th>
+                                <th>Total</th>
+                                <th>Bayar</th>
+                                <th>Sisa</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                            <!-- Static data for demonstration -->
+                            <?php
+                            // Query untuk mengambil data pembelian beserta nama user, toko, dan supplier
+                            $sql = "SELECT pembelian.*, user.nama_lengkap AS nama_user, toko.nama_toko AS nama_toko, suplier.nama_suplier AS nama_supplier FROM pembelian
+                            INNER JOIN user ON pembelian.user_id = user.user_id
+                            INNER JOIN toko ON pembelian.toko_id = toko.toko_id
+                            INNER JOIN suplier ON pembelian.suplier_id = suplier.suplier_id";
+                            $result = $koneksi->query($sql);
 
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+                            // Tampilkan data dalam tabel
+                            if ($result) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . $row["pembelian_id"] . "</td>";
+                                    echo "<td>" . $row["nama_toko"] . "</td>";
+                                    echo "<td>" . $row["nama_user"] . "</td>";
+                                    echo "<td>" . $row["no_faktur"] . "</td>";
+                                    echo "<td>" . $row["tanggal_pembelian"] . "</td>";
+                                    echo "<td>" . $row["nama_supplier"] . "</td>";
+                                    echo "<td>" . $row["total"] . "</td>";
+                                    echo "<td>" . $row["bayar"] . "</td>";
+                                    echo "<td>" . $row["sisa"] . "</td>";
+                                    echo "<td>" . $row["keterangan"] . "</td>";
+                                    echo "<td>
+                                            <a href='edit_pembelian_barang.php?id=" . $row["pembelian_id"] . "' class='btn btn-success btn-sm'>Edit</a>
+                                            <a href='hapus_pembelian.php?id=" . $row["pembelian_id"] . "' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?')\">Delete</a>
+                                        </td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='12'>Tidak ada data pembelian barang.</td></tr>";
+                            }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+                            // Tutup koneksi
+                            $koneksi->close();
+                            ?>
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
+                            <!-- Add more rows for additional data -->
+                        </table>
 
-        th {
-            background-color: #f2f2f2;
-        }
+                    </body>
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+                    </html>
 
-        tr:hover {
-            background-color: #ddd;
-        }
-    </style>
-</head>
 
-<body>
 
-    <div class="container">
-        <h2>Detail Pembelian</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Produk</th>
-                    <th>Qty</th>
-                    <th>Harga Beli</th>
-                    <th>Subtotal</th>
-                    <th>Waktu Pembelian</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Ambil data detail pembelian dari database (ganti query sesuai kebutuhan)
-                $query = "SELECT * FROM pembelian_detail WHERE pembelian_id = :pembelian_id";
-                $stmt = $pdo->prepare($query);
-                $stmt->bindParam(':pembelian_id', $pembelian_id);
-                $stmt->execute();
-                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                </div>
+                <!-- /.container-fluid -->
 
-                // Cek apakah ada data
-                if ($result1) {
-                    $no = 1; // Nomor urut awal
-                    foreach ($result1 as $row) {
-                        echo "<tr>";
-                        echo "<td>" . $no++ . "</td>"; // Nomor urut
-                        echo "<td>" . $row['nama_produk'] . "</td>"; // Nama produk
-                        echo "<td>" . $row['qty'] . "</td>"; // Jumlah pembelian
-                        echo "<td>" . $row['harga_beli'] . "</td>"; // Harga beli per unit
-                        echo "<td>" . $row['total'] . "</td>"; // Subtotal (harga beli * jumlah)
-                        echo "<td>" . $row['created_at'] . "</td>"; // Waktu pembelian
-                        echo "</tr>";
-                    }
-                } else {
-                    // Tampilkan pesan jika tidak ada data detail pembelian
-                    echo "<tr><td colspan='6'>Tidak ada data detail pembelian.</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="m-0 text-center text-black">
+
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
     </div>
-</body>
-
-</html>
-
-
+    <!-- End of Page Wrapper -->
 
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -416,8 +325,7 @@ if (isset($_POST['submit'])) {
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -429,11 +337,29 @@ if (isset($_POST['submit'])) {
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../logout.php">Logout</a>
+                    <a class="btn btn-primary" href="../../logout.php">Logout</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Mengambil URL halaman saat ini
+        var currentUrl = window.location.href;
+
+        // Mengambil semua elemen sidebar yang memiliki link
+        var sidebarLinks = document.querySelectorAll('.nav-link[href]');
+
+        // Iterasi melalui setiap link sidebar
+        sidebarLinks.forEach(function(link) {
+            // Jika URL saat ini cocok dengan URL link di sidebar
+            if (currentUrl === link.href) {
+                // Tambahkan kelas 'active' pada elemen li yang bersangkutan
+                link.parentNode.classList.add('active');
+            }
+        });
+    </script>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="../../SBAdmin/vendor/jquery/jquery.min.js"></script>
@@ -444,6 +370,15 @@ if (isset($_POST['submit'])) {
 
     <!-- Custom scripts for all pages-->
     <script src="../../SBAdmin/js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="../../SBAdmin/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../../SBAdmin/js/demo/chart-area-demo.js"></script>
+    <script src="../../SBAdmin/js/demo/chart-pie-demo.js"></script>
+
+    <!-- Additional custom scripts or scripts for handling data tables can be added here -->
 
 </body>
 

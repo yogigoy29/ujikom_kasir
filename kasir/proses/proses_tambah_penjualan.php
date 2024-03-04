@@ -4,6 +4,15 @@ include '../../koneksi.php';
 
 // Memulai session
 session_start();
+$toko_id=$_POST['toko_id'];
+$user_id=$_POST['user_id'];
+$tanggal_penjualan=$_POST['tanggal_penjualan'];
+$pelanggan_id=$_POST['pelanggan_id'];
+$total=['total']; 
+$bayar=['bayar'];
+$sisa = $total - $bayar;
+$keterangan = $_POST ['keterangan'];
+$created_at = date('Y-m-d H:i:s');
 
 try {
         // Replace the following lines with your actual database insertion logic

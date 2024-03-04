@@ -57,7 +57,7 @@ $result1 = mysqli_query($koneksi,$sql1);
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" href="../index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span></a>
             </li>
 
@@ -83,7 +83,6 @@ $result1 = mysqli_query($koneksi,$sql1);
                         <a class="collapse-item" href="../../toko.php">Toko</a>
                         <a class="collapse-item" href="../../Kategori.php">Kategori</a>
                         <a class="collapse-item" href="../../list_produk.php">Produk</a>
-                        <a class="collapse-item" href="../../pengguna.php">Pengguna</a>
                         <a class="collapse-item" href="../../pelanggan.php">Pelanggan</a>
                          <a class="collapse-item active" href="../../supplier.php">Supplier</a>
                     </div>
@@ -103,8 +102,9 @@ $result1 = mysqli_query($koneksi,$sql1);
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Menu:</h6>
-                        <a class="collapse-item" href="log.php">Pembelian</a>
-                        <a class="collapse-item" href="penjualan.php">Penjualan</a>
+                       <a class="collapse-item" href="../Transaksi/pembelian.php">Pembelian</a>
+                        <a class="collapse-item" href="../Transaksi/detail_penjualan.php">Detail Penjualan</a>
+                        <a class="collapse-item" href="../Transaksi/detail_pembelian.php">Detail Pembelian</a>
                     </div>
                 </div>
             </li>
@@ -117,10 +117,10 @@ $result1 = mysqli_query($koneksi,$sql1);
             <hr class="sidebar-divider d-none d-md-block">
 
             <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="registrasi_pengguna.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Data User</span></a>
+             <li class="nav-item">
+                <a class="nav-link" href="pengguna.php">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Data Pengguna</span></a>
             </li>
 
             <!-- Sidebar Toggler (Sidebar) -->
