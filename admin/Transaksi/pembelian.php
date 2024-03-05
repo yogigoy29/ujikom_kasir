@@ -474,26 +474,7 @@ $koneksi->close();
                         <th>Pilih</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Ekonomi</td>
-                        <td>Rp. 20.000</td>
-                        <td><input type="number" id="qtyEkonomi" name="qtyEkonomi" min="0" style="width:60px;" oninput="hitungSisa()"></td>
-                        <td><input type="checkbox" class="selectProduct" id="chkEkonomi" name="selectProduct[]" value="Ekonomi" onchange="updateQty(this)"></td>
-                    </tr>
-                    <tr>
-                        <td>Kopi</td>
-                        <td>Rp. 25.000</td>
-                        <td><input type="number" id="qtyKopi" name="qtyKopi" min="0" style="width:60px;" oninput="hitungSisa()"></td>
-                        <td><input type="checkbox" class="selectProduct" id="chkKopi" name="selectProduct[]" value="Kopi" onchange="updateQty(this)"></td>
-                    </tr>
-                    <tr>
-                        <td>Nabati</td>
-                        <td>Rp. 20.000</td>
-                        <td><input type="number" id="qtyNabati" name="qtyNabati" min="0" style="width:60px;" oninput="hitungSisa()"></td>
-                        <td><input type="checkbox" class="selectProduct" id="chkNabati" name="selectProduct[]" value="Nabati" onchange="updateQty(this)"></td>
-                    </tr>
-                </tbody>
+                
             </table>
             <br>
             

@@ -9,6 +9,9 @@ $result = mysqli_query($koneksi,$sql);
 $sql1 = "SELECT * FROM produk_kategori";
 $result1 = mysqli_query($koneksi,$sql1);
 
+$sql2 = "SELECT * FROM suplier";
+$result2 = mysqli_query($koneksi,$sql2);
+
 ?>
 
 
@@ -251,6 +254,22 @@ $result1 = mysqli_query($koneksi,$sql1);
                     echo "Gagal mengambil data";
                 }
         ?>
+         <?php
+            if ($result2) {
+                echo "<label for='suplier_id'>Id Suplier :</label>";
+                echo "<select class='form-control' name='suplier' required>";
+
+                while ($raw = mysqli_fetch_assoc($result2)) {
+                    $suplier_id = $raw['suplier_id'];
+                    $nama_suplier = $raw['nama_suplier'];
+                    echo "<option value='$nama_suplier'>$suplier_id</option>";
+                    }
+
+                    echo "</select>";
+                } else {
+                    echo "Gagal mengambil data";
+                }
+        ?>
             <div class="form-group">
                 <label for="nama_produk">Nama Produk:</label>
                 <input type="text" class="form-control" id="nama_produk" name="nama_produk" required>
@@ -267,7 +286,6 @@ $result1 = mysqli_query($koneksi,$sql1);
                 <label for="harga_jual">Harga Jual:</label>
                 <input type="number" class="form-control" id="harga_jual" name="harga_jual" required>
             </div>
-            
             <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
       
