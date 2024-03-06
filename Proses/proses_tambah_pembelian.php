@@ -7,7 +7,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userId = $_POST['userId'];
     $noFaktur = $_POST['noFaktur'];
     $tanggalPembelian = $_POST['tanggalPembelian'];
-    $suplierId = $_POST['suplierId'];
     $total = $_POST['total'];
     $bayar = $_POST['bayar'];
     $sisa = $_POST['sisa'];
@@ -25,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Query SQL untuk menyimpan data ke tabel pembelian
-        $query = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, suplier_id, total, bayar, sisa, keterangan, created_at)
-                  VALUES ('$tokoId', '$userId', '$noFaktur', '$tanggalPembelian', '$suplierId', '$total', '$bayar', '$sisa', '$keterangan', '$createdAt')";
+        $query = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, total, bayar, sisa, keterangan, created_at)
+                  VALUES ('$tokoId', '$userId', '$noFaktur', '$tanggalPembelian', '$total', '$bayar', '$sisa', '$keterangan', '$createdAt')";
 
         if ($mysqli->query($query) === TRUE) {
             // Redirect ke halaman lain atau berikan respons sesuai kebutuhan

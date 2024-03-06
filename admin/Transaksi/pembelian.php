@@ -1,11 +1,11 @@
 <?php
 include '../../koneksi.php';
 session_start();
+
 // Inisialisasi data pembelian
 $pembelianToAdd = [
-    'pembelian_id' => '',
     'toko_id' => '',
-    'user_id' => '',
+    'user_id' => $_SESSION['user_id'],
     'no_faktur' => '',
     'tanggal_pembelian' => '',
     'suplier_id' => '',
@@ -26,16 +26,6 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Ambil data user dari database
-$sql = "SELECT user_id, username FROM user";
-$result = $koneksi->query($sql);
-$userOptions = "";
-if ($result->num_rows > 0) {
-    while($row = $result->fetch_assoc()) {
-        $userOptions .= "<option value='" . $row["user_id"] . "'>" . $row["username"] . "</option>";
-    }
-}
-
 // Ambil data supplier dari database
 $sql = "SELECT suplier_id, nama_suplier FROM suplier";
 $result = $koneksi->query($sql);
@@ -50,7 +40,6 @@ if ($result->num_rows > 0) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Tangani data POST
     $pembelianToAdd = [
-        'pembelian_id' => $_POST['pembelianId'],
         'toko_id' => $_POST['tokoId'],
         'user_id' => $_POST['userId'],
         'no_faktur' => $_POST['noFaktur'],
@@ -64,13 +53,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
 
     // Simpan data ke dalam database
-    // Code untuk menyimpan data ke database di sini
-    // Pastikan untuk mengganti bagian ini dengan logika penyimpanan ke database sesuai dengan struktur tabel Anda
+    $sql = "INSERT INTO pembelian (toko_id, user_id, no_faktur, tanggal_pembelian, suplier_id, total, bayar, sisa, keterangan, created_at) 
+            VALUES ('".$pembelianToAdd['toko_id']."', '".$pembelianToAdd['user_id']."', '".$pembelianToAdd['no_faktur']."', 
+                    '".$pembelianToAdd['tanggal_pembelian']."', '".$pembelianToAdd['suplier_id']."', '".$pembelianToAdd['total']."', 
+                    '".$pembelianToAdd['bayar']."', '".$pembelianToAdd['sisa']."', '".$pembelianToAdd['keterangan']."', '".$pembelianToAdd['created_at']."')";
+
+    if ($koneksi->query($sql) === TRUE) {
+        echo "Pembelian berhasil disimpan.";
+    } else {
+        echo "Error: " . $sql . "<br>" . $koneksi->error;
+    }
 }
 
 // Tutup koneksi
 $koneksi->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -413,7 +411,7 @@ $koneksi->close();
         <div id="formContainer">
             <h2>Tambah Pembelian</h2>
 
-            <form id="formTambahPembelian" method="post" action="detail_pembelian.php">
+            <form id="formTambahPembelian" method="post" action="../../Proses/proses_tambah_pembelian.php">
 
                 <input type="hidden" id="pembelianId" name="pembelianId" value="">
 
@@ -474,7 +472,26 @@ $koneksi->close();
                         <th>Pilih</th>
                     </tr>
                 </thead>
-                
+                <tbody>
+                    <tr>
+                        <td>Magnum</td>
+                        <td>Rp. 20.000</td>
+                        <td><input type="number" id="qtyMagnum" name="qtyMagnum" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkMagnum" name="selectProduct[]" value="Magnum" onchange="updateQty(this)"></td>
+                    </tr>
+                    <tr>
+                        <td>Power f</td>
+                        <td>Rp. 25.000</td>
+                        <td><input type="number" id="qtyPower f" name="qtyPower f" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkPower f" name="selectProduct[]" value="Power f" onchange="updateQty(this)"></td>
+                    </tr>
+                    <tr>
+                        <td>aqua</td>
+                        <td>Rp. 20.000</td>
+                        <td><input type="number" id="qtyaqua" name="qtyaqua" min="0" style="width:60px;" oninput="hitungSisa()"></td>
+                        <td><input type="checkbox" class="selectProduct" id="chkaqua" name="selectProduct[]" value="aqua" onchange="updateQty(this)"></td>
+                    </tr>
+                </tbody>
             </table>
             <br>
             
@@ -506,9 +523,9 @@ $koneksi->close();
         function getProductPrice(productName) {
             // Harga barang (di sini diimplementasikan secara statis, Anda dapat memodifikasi agar sesuai dengan kebutuhan Anda)
             const hargaBarang = {
-                "Ekonomi": 20000,
-                "Kopi": 25000,
-                "Nabati": 20000
+                "Magnum": 20000,
+                "Power f": 25000,
+                "aqua": 20000
             };
 
             return hargaBarang[productName] || 0; // Kembalikan harga produk, jika tidak ada, kembalikan 0

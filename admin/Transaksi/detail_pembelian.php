@@ -252,41 +252,48 @@ session_start();
                                 <th>Aksi</th>
                             </tr>
                             <!-- Static data for demonstration -->
-                            <?php
-                            // Query untuk mengambil data pembelian beserta nama user, toko, dan supplier
-                            $sql = "SELECT pembelian.*, user.nama_lengkap AS nama_user, toko.nama_toko AS nama_toko, suplier.nama_suplier AS nama_supplier FROM pembelian
-                            INNER JOIN user ON pembelian.user_id = user.user_id
-                            INNER JOIN toko ON pembelian.toko_id = toko.toko_id
-                            INNER JOIN suplier ON pembelian.suplier_id = suplier.suplier_id";
-                            $result = $koneksi->query($sql);
+                           <?php
+// Query untuk mengambil data pembelian beserta nama user, toko, dan supplier
+$sql = "SELECT pembelian_detail.*, 
+       user.nama_lengkap AS nama_user, 
+       toko.nama_toko AS nama_toko, 
+       suplier.nama_suplier AS nama_supplier 
+FROM pembelian_detail
+INNER JOIN pembelian ON pembelian_detail.pembelian_id = pembelian.pembelian_id
+INNER JOIN user ON pembelian.user_id = user.user_id
+INNER JOIN toko ON pembelian.toko_id = toko.toko_id
+INNER JOIN suplier ON suplier.suplier_id
+";
+$result = $koneksi->query($sql);
 
-                            // Tampilkan data dalam tabel
-                            if ($result) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row["pembelian_id"] . "</td>";
-                                    echo "<td>" . $row["nama_toko"] . "</td>";
-                                    echo "<td>" . $row["nama_user"] . "</td>";
-                                    echo "<td>" . $row["no_faktur"] . "</td>";
-                                    echo "<td>" . $row["tanggal_pembelian"] . "</td>";
-                                    echo "<td>" . $row["nama_supplier"] . "</td>";
-                                    echo "<td>" . $row["total"] . "</td>";
-                                    echo "<td>" . $row["bayar"] . "</td>";
-                                    echo "<td>" . $row["sisa"] . "</td>";
-                                    echo "<td>" . $row["keterangan"] . "</td>";
-                                    echo "<td>
-                                            <a href='edit_pembelian_barang.php?id=" . $row["pembelian_id"] . "' class='btn btn-success btn-sm'>Edit</a>
-                                            <a href='hapus_pembelian.php?id=" . $row["pembelian_id"] . "' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?')\">Delete</a>
-                                        </td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='12'>Tidak ada data pembelian barang.</td></tr>";
-                            }
+// Tampilkan data dalam tabel
+if ($result) {
+   while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $row["pembelian_id"] . "</td>";
+        echo "<td>" . $row["nama_toko"] . "</td>";
+        echo "<td>" . $row["nama_user"] . "</td>";
+        echo "<td>" . $row["no_faktur"] . "</td>";
+        echo "<td>" . $row["tanggal_pembelian"] . "</td>";
+        echo "<td>" . $row["nama_supplier"] . "</td>";
+        echo "<td>" . $row["total"] . "</td>";
+        echo "<td>" . $row["bayar"] . "</td>";
+        echo "<td>" . $row["sisa"] . "</td>";
+        echo "<td>" . $row["keterangan"] . "</td>";
+        echo "<td>
+                <a href='edit_pembelian_barang.php?id=" . $row["pembelian_id"] . "' class='btn btn-success btn-sm'>Edit</a>
+                <a href='hapus_pembelian.php?id=" . $row["pembelian_id"] . "' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus data ini?')\">Delete</a>
+            </td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='12'>Tidak ada data pembelian barang.</td></tr>";
+}
 
-                            // Tutup koneksi
-                            $koneksi->close();
-                            ?>
+// Tutup koneksi
+$koneksi->close();
+?>
+
 
                             <!-- Add more rows for additional data -->
                         </table>
